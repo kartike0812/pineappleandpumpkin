@@ -495,62 +495,38 @@ let canvas=document.getElementById("signaturePad");
 let ctx=canvas.getContext("2d");
 let drawing=false;
 
-/* prevent scrolling when signing */
-canvas.addEventListener("touchstart", e=>e.preventDefault());
-canvas.addEventListener("touchmove", e=>e.preventDefault());
-
-/* function to get correct position */
-function getPos(e){
-let rect=canvas.getBoundingClientRect();
-
-if(e.touches){
-return{
-x:e.touches[0].clientX-rect.left,
-y:e.touches[0].clientY-rect.top
-};
-}else{
-return{
-x:e.offsetX,
-y:e.offsetY
-};
-}
-}
-
-/* mouse events */
 canvas.onmousedown=e=>{
 drawing=true;
-let pos=getPos(e);
 ctx.beginPath();
-ctx.moveTo(pos.x,pos.y);
+ctx.moveTo(e.offsetX,e.offsetY);
 };
 
 canvas.onmouseup=()=>drawing=false;
 
 canvas.onmousemove=e=>{
 if(!drawing)return;
-let pos=getPos(e);
-ctx.lineTo(pos.x,pos.y);
+ctx.lineTo(e.offsetX,e.offsetY);
 ctx.stroke();
 };
 
-/* touch events for mobile */
-canvas.addEventListener("touchstart", e=>{
-drawing=true;
-let pos=getPos(e);
-ctx.beginPath();
-ctx.moveTo(pos.x,pos.y);
-});
+function clearSignature(){
+ctx.clearRect(0,0,canvas.width,canvas.height);
+}
 
-canvas.addEventListener("touchend", ()=>{
-drawing=false;
-});
+function signAgreement(){
 
-canvas.addEventListener("touchmove", e=>{
-if(!drawing)return;
-let pos=getPos(e);
-ctx.lineTo(pos.x,pos.y);
-ctx.stroke();
-});
+let data=ctx.getImageData(0,0,canvas.width,canvas.height).data;
+
+let empty=true;
+
+for(let i=0;i<data.length;i+=4){
+
+if(data[i+3]!=0){
+empty=false;
+break;
+}
+
+}
 
 if(empty)
 showPopup("Sign Kro pehle cutiiiee ❤️✍️");
@@ -676,4 +652,3 @@ setTimeout(()=>petal.remove(),8000);
 
 </body>
 </html>
-
