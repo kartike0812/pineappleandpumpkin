@@ -200,57 +200,46 @@ opacity:0.8;
 }
 
 
-/* ================= MOBILE ONLY ================= */
+/* MOBILE ONLY */
 
-@media (max-width:600px){
+@media(max-width:600px){
 
 .card{
-width:95% !important;
-padding:20px !important;
+width:95%;
+padding:20px;
 }
 
 .gift-container{
-flex-direction:column !important;
-align-items:center !important;
-gap:15px !important;
+flex-direction:column;
+align-items:center;
 }
 
 .gift-box{
-width:80% !important;
-max-width:250px !important;
-height:130px !important;
+width:80%;
+max-width:250px;
 }
 
 .quiz-box,
 .agreement-box{
-width:95% !important;
+width:95%;
 }
 
 canvas{
-width:100% !important;
-height:150px !important;
+width:100%;
 }
 
 .letter-paper{
-height:50vh !important;
-font-size:15px !important;
-}
-
-.envelope{
-width:160px !important;
-height:100px !important;
+height:50vh;
 }
 
 button{
-width:100% !important;
-font-size:16px !important;
+width:100%;
 }
 
 }
 
 </style>
 </head>
-
 <body>
 
 <div class="card">
@@ -283,11 +272,11 @@ font-size:16px !important;
 </div>
 
 
-<!-- QUIZ PAGE -->
+<!-- QUIZ -->
 
 <div id="quizPage" class="hidden">
 
-<h1>Quiz for you Ans fas fas 🥺</h1>
+<h1>Quiz for you 🥺</h1>
 
 <div class="quiz-box">
 
@@ -297,12 +286,12 @@ font-size:16px !important;
 
 </div>
 
-<button onclick="goBack()">← BACK</button>
+<button onclick="goBack()">BACK</button>
 
 </div>
 
 
-<!-- AGREEMENT PAGE -->
+<!-- AGREEMENT -->
 
 <div id="agreementPage" class="hidden">
 
@@ -321,67 +310,59 @@ Signature:
 
 </div>
 
-<button onclick="goBack()">← BACK</button>
+<button onclick="goBack()">BACK</button>
 
 </div>
 
 
-<!-- LETTER PAGE -->
+<!-- LETTER -->
 
 <div id="letterPage" class="hidden">
 
 <h1>A Letter For You 🥺</h1>
 
-<div id="envelopeContainer">
-
 <div class="envelope" onclick="openEnvelope()">
 <div class="flap"></div>
 </div>
 
-</div>
-
 <div id="letterContent" class="letter-paper hidden">
-
 <span id="letterText"></span>
+</div>
+
+<button onclick="goBack()">BACK</button>
 
 </div>
 
-<button onclick="goBack()">← BACK</button>
-
 </div>
 
-</div>
-
-
-<div class="overlay" id="overlay"></div>
 
 <div class="popup" id="popup">
 <p id="popupText"></p>
-<button onclick="closePopup()">OK ❤️</button>
+<button onclick="closePopup()">OK</button>
 </div>
+
+<div class="overlay" id="overlay"></div>
 
 <audio id="music" src="romantic.mp3" loop></audio>
 
 
 <script>
 
-/* EXACT SAME JS — unchanged to preserve desktop */
+/* TRACKING */
 
 let gift1Opened=false;
 let gift2Opened=false;
 let gift3Opened=false;
 
-const giftPage=document.getElementById("giftPage");
-const quizPage=document.getElementById("quizPage");
-const agreementPage=document.getElementById("agreementPage");
-const letterPage=document.getElementById("letterPage");
+
+/* NAVIGATION */
 
 function hideAll(){
 
-giftPage.classList.add("hidden");
-quizPage.classList.add("hidden");
-agreementPage.classList.add("hidden");
-letterPage.classList.add("hidden");
+document.getElementById("giftPage").classList.add("hidden");
+document.getElementById("quizPage").classList.add("hidden");
+document.getElementById("agreementPage").classList.add("hidden");
+document.getElementById("letterPage").classList.add("hidden");
 
 }
 
@@ -391,71 +372,17 @@ document.getElementById("music").pause();
 
 hideAll();
 
-giftPage.classList.remove("hidden");
+document.getElementById("giftPage").classList.remove("hidden");
 
 }
 
-function openQuiz(){
 
-gift1Opened=true;
-
-hideAll();
-
-quizPage.classList.remove("hidden");
-
-}
-
-function openAgreement(){
-
-gift2Opened=true;
-
-hideAll();
-
-agreementPage.classList.remove("hidden");
-
-}
-
-function openLetterPage(){
-
-gift3Opened=true;
-
-hideAll();
-
-letterPage.classList.remove("hidden");
-
-document.getElementById("music").play().catch(()=>{});
-
-}
-
-function openEnvelope(){
-
-document.querySelector(".envelope").classList.add("open");
-
-document.getElementById("letterContent").classList.remove("hidden");
-
-}
-
-function openFinallyPage(){
-
-if(gift1Opened && gift2Opened && gift3Opened){
-
-window.location.href="forever.html";
-
-}
-else{
-
-showPopup("Pehle sare gift to khol lo cutie ❤️");
-
-}
-
-}
+/* POPUP */
 
 function showPopup(msg){
 
 document.getElementById("popupText").innerText=msg;
-
 document.getElementById("popup").classList.add("show");
-
 document.getElementById("overlay").classList.add("show");
 
 }
@@ -463,37 +390,92 @@ document.getElementById("overlay").classList.add("show");
 function closePopup(){
 
 document.getElementById("popup").classList.remove("show");
-
 document.getElementById("overlay").classList.remove("show");
 
 }
 
-/* signature */
+
+/* QUIZ */
+
+const questions=[
+
+{
+question:"Who loves more?",
+options:["Me","You"],
+correct:1
+}
+
+];
+
+let currentQuestion=0;
+
+function openQuiz(){
+
+gift1Opened=true;
+
+hideAll();
+
+document.getElementById("quizPage").classList.remove("hidden");
+
+document.getElementById("question").innerText=questions[0].question;
+
+const optionsDiv=document.getElementById("options");
+
+optionsDiv.innerHTML="";
+
+questions[0].options.forEach((opt,index)=>{
+
+const div=document.createElement("div");
+
+div.className="option";
+
+div.innerText=opt;
+
+div.onclick=function(){
+
+if(index===questions[0].correct){
+
+showPopup("Correct ❤️");
+
+}
+
+};
+
+optionsDiv.appendChild(div);
+
+});
+
+}
+
+
+/* AGREEMENT */
+
+function openAgreement(){
+
+gift2Opened=true;
+
+hideAll();
+
+document.getElementById("agreementPage").classList.remove("hidden");
+
+}
 
 let canvas=document.getElementById("signaturePad");
 let ctx=canvas.getContext("2d");
 let drawing=false;
 
 canvas.onmousedown=e=>{
-
 drawing=true;
-
 ctx.beginPath();
-
 ctx.moveTo(e.offsetX,e.offsetY);
-
 };
 
 canvas.onmouseup=()=>drawing=false;
 
 canvas.onmousemove=e=>{
-
 if(!drawing)return;
-
 ctx.lineTo(e.offsetX,e.offsetY);
-
 ctx.stroke();
-
 };
 
 function clearSignature(){
@@ -505,6 +487,65 @@ ctx.clearRect(0,0,canvas.width,canvas.height);
 function signAgreement(){
 
 showPopup("You Are Officially Mine Forever ❤️");
+
+}
+
+
+/* LETTER */
+
+const letter="I love you forever ❤️";
+
+let index=0;
+
+function openLetterPage(){
+
+gift3Opened=true;
+
+hideAll();
+
+document.getElementById("letterPage").classList.remove("hidden");
+
+document.getElementById("music").play().catch(()=>{});
+
+}
+
+function openEnvelope(){
+
+document.querySelector(".envelope").classList.add("open");
+
+const letterDiv=document.getElementById("letterContent");
+
+letterDiv.classList.remove("hidden");
+
+const text=document.getElementById("letterText");
+
+let interval=setInterval(()=>{
+
+if(index<letter.length){
+
+text.innerHTML+=letter[index];
+index++;
+
+}else clearInterval(interval);
+
+},50);
+
+}
+
+
+/* FINALLY */
+
+function openFinallyPage(){
+
+if(gift1Opened && gift2Opened && gift3Opened){
+
+window.location.href="forever.html";
+
+}else{
+
+showPopup("Open all gifts first ❤️");
+
+}
 
 }
 
