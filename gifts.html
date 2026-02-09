@@ -240,6 +240,7 @@ width:100%;
 
 </style>
 </head>
+
 <body>
 
 <div class="card">
@@ -272,34 +273,14 @@ width:100%;
 </div>
 
 
-<!-- QUIZ -->
-
 <div id="quizPage" class="hidden">
-
-<h1>Quiz for you 🥺</h1>
-
-<div class="quiz-box">
-
-<p id="question"></p>
-
-<div id="options"></div>
-
-</div>
-
+<h1>You passed the test ❤️</h1>
 <button onclick="goBack()">BACK</button>
-
 </div>
 
-
-<!-- AGREEMENT -->
 
 <div id="agreementPage" class="hidden">
-
 <h1>Forever Agreement 💍</h1>
-
-<div class="agreement-box">
-
-Signature:
 
 <canvas id="signaturePad" width="350" height="150"></canvas>
 
@@ -308,14 +289,10 @@ Signature:
 <button onclick="clearSignature()">Clear</button>
 <button onclick="signAgreement()">Sign ❤️</button>
 
-</div>
-
 <button onclick="goBack()">BACK</button>
 
 </div>
 
-
-<!-- LETTER -->
 
 <div id="letterPage" class="hidden">
 
@@ -355,7 +332,7 @@ let gift2Opened=false;
 let gift3Opened=false;
 
 
-/* NAVIGATION */
+/* NAV */
 
 function hideAll(){
 
@@ -377,37 +354,7 @@ document.getElementById("giftPage").classList.remove("hidden");
 }
 
 
-/* POPUP */
-
-function showPopup(msg){
-
-document.getElementById("popupText").innerText=msg;
-document.getElementById("popup").classList.add("show");
-document.getElementById("overlay").classList.add("show");
-
-}
-
-function closePopup(){
-
-document.getElementById("popup").classList.remove("show");
-document.getElementById("overlay").classList.remove("show");
-
-}
-
-
 /* QUIZ */
-
-const questions=[
-
-{
-question:"Who loves more?",
-options:["Me","You"],
-correct:1
-}
-
-];
-
-let currentQuestion=0;
 
 function openQuiz(){
 
@@ -416,34 +363,6 @@ gift1Opened=true;
 hideAll();
 
 document.getElementById("quizPage").classList.remove("hidden");
-
-document.getElementById("question").innerText=questions[0].question;
-
-const optionsDiv=document.getElementById("options");
-
-optionsDiv.innerHTML="";
-
-questions[0].options.forEach((opt,index)=>{
-
-const div=document.createElement("div");
-
-div.className="option";
-
-div.innerText=opt;
-
-div.onclick=function(){
-
-if(index===questions[0].correct){
-
-showPopup("Correct ❤️");
-
-}
-
-};
-
-optionsDiv.appendChild(div);
-
-});
 
 }
 
@@ -486,7 +405,7 @@ ctx.clearRect(0,0,canvas.width,canvas.height);
 
 function signAgreement(){
 
-showPopup("You Are Officially Mine Forever ❤️");
+showPopup("Signed Forever ❤️");
 
 }
 
@@ -513,22 +432,18 @@ function openEnvelope(){
 
 document.querySelector(".envelope").classList.add("open");
 
-const letterDiv=document.getElementById("letterContent");
-
-letterDiv.classList.remove("hidden");
-
-const text=document.getElementById("letterText");
+document.getElementById("letterContent").classList.remove("hidden");
 
 let interval=setInterval(()=>{
 
 if(index<letter.length){
 
-text.innerHTML+=letter[index];
+document.getElementById("letterText").innerHTML+=letter[index];
 index++;
 
 }else clearInterval(interval);
 
-},50);
+},30);
 
 }
 
@@ -546,6 +461,24 @@ window.location.href="forever.html";
 showPopup("Open all gifts first ❤️");
 
 }
+
+}
+
+
+/* POPUP */
+
+function showPopup(msg){
+
+document.getElementById("popupText").innerText=msg;
+document.getElementById("popup").classList.add("show");
+document.getElementById("overlay").classList.add("show");
+
+}
+
+function closePopup(){
+
+document.getElementById("popup").classList.remove("show");
+document.getElementById("overlay").classList.remove("show");
 
 }
 
