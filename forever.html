@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>You are my forever ❤️</title>
+
+<style>
+
+body{
+margin:0;
+padding:0;
+background:#f3e4cf;
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+font-family:Georgia, serif;
+overflow:hidden;
+position:relative;
+
+/* cinematic zoom */
+animation:cinematicZoom 2s ease;
+}
+
+/* cinematic vignette */
+
+body::after{
+content:"";
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+pointer-events:none;
+background:
+radial-gradient(circle at center,
+transparent 40%,
+rgba(0,0,0,0.15) 70%,
+rgba(0,0,0,0.35) 100%);
+z-index:1;
+}
+
+@keyframes cinematicZoom{
+from{
+transform:scale(1.15);
+opacity:0;
+}
+to{
+transform:scale(1);
+opacity:1;
+}
+}
+
+/* card */
+
+.card{
+background:#e6a4b4;
+width:800px;
+max-width:95%;
+padding:40px;
+border-radius:20px;
+box-shadow:
+0 20px 40px rgba(0,0,0,0.25),
+0 0 60px rgba(255,100,150,0.25);
+
+text-align:center;
+position:relative;
+z-index:2;
+
+/* floating + breathing */
+animation:
+floatCard 4s ease-in-out infinite,
+cardBreathing 6s ease-in-out infinite;
+}
+
+@keyframes floatCard{
+0%,100%{transform:translateY(0);}
+50%{transform:translateY(-12px);}
+}
+
+@keyframes cardBreathing{
+0%,100%{transform:scale(1);}
+50%{transform:scale(1.02);}
+}
+
+/* heading glow */
+
+h1{
+font-size:32px;
+margin-bottom:20px;
+animation:titleGlow 3s infinite alternate;
+}
+
+@keyframes titleGlow{
+from{
+text-shadow:0 0 5px rgba(255,255,255,0.3);
+}
+to{
+text-shadow:
+0 0 20px rgba(255,255,255,0.8),
+0 0 40px rgba(255,100,150,0.6);
+}
+}
+
+/* glowing image */
+
+img{
+width:250px;
+max-width:90%;
+border-radius:15px;
+margin-bottom:20px;
+
+box-shadow:0 0 20px rgba(255,0,100,0.6);
+
+animation:imageGlow 3s infinite alternate;
+}
+
+@keyframes imageGlow{
+from{
+box-shadow:0 0 15px rgba(255,0,100,0.4);
+}
+to{
+box-shadow:
+0 0 35px rgba(255,0,100,0.9),
+0 0 60px rgba(255,100,150,0.5);
+}
+}
+
+/* text fade */
+
+p{
+font-size:14px;
+line-height:1.6;
+max-width:600px;
+margin:auto;
+
+animation:textFade 3s ease;
+}
+
+@keyframes textFade{
+from{
+opacity:0;
+transform:translateY(20px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
+
+/* glowing button */
+
+button{
+background:red;
+color:white;
+border:none;
+padding:10px 25px;
+border-radius:20px;
+cursor:pointer;
+margin-top:20px;
+font-size:15px;
+
+box-shadow:0 0 10px rgba(255,0,0,0.5);
+
+animation:buttonGlow 1.5s infinite alternate;
+}
+
+@keyframes buttonGlow{
+from{
+box-shadow:0 0 10px rgba(255,0,0,0.4);
+}
+to{
+box-shadow:
+0 0 25px rgba(255,0,0,0.9),
+0 0 40px rgba(255,100,100,0.6);
+}
+}
+
+/* petals */
+
+.petal{
+position:fixed;
+top:-20px;
+font-size:20px;
+pointer-events:none;
+animation:fall linear forwards;
+z-index:999;
+}
+
+@keyframes fall{
+to{
+transform:translateY(110vh) rotate(360deg);
+opacity:0.9;
+}
+}
+
+/* hearts */
+
+.heart{
+position:fixed;
+bottom:-20px;
+font-size:20px;
+animation:floatHeart linear forwards;
+z-index:998;
+}
+
+@keyframes floatHeart{
+to{
+transform:translateY(-110vh);
+opacity:0;
+}
+}
+
+/* confetti */
+
+.confetti{
+position:fixed;
+width:8px;
+height:8px;
+animation:confettiFall linear forwards;
+z-index:999;
+}
+
+@keyframes confettiFall{
+to{
+transform:translateY(110vh) rotate(720deg);
+opacity:0;
+}
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="card">
+
+<h1>You are my forever 🌍 ❤️!</h1>
+
+<img src="your-photo.jpeg" alt="Our Photo">
+
+<p>
+Moti, actually we don’t need any Valentine’s Day or any kind of special day to celebrate our love. Our every day is Valentine’s Day. Humara har din celebration hai, har din pyara hai. Kabhi hum haste haste celebrate karte hain, kabhi thode sad moments mein bhi saath rehkar usse khushi mein badal dete hain. That’s just us. Hum duniya se alag couples hain. We are the special ones, the selected ones, the bestest ones.
+    I love you more than words can say ❤️  .  
+Thank you for being my peace, my smile, my love.  
+This Valentine's Day and every day after, I'm grateful to call you mine forever.
+</p>
+
+<button onclick="goBack()">← BACK</button>
+
+</div>
+
+<!-- YOUR CUSTOM MUSIC FILE -->
+<audio id="music" src="your-music.mp3" loop></audio>
+
+<script>
+
+const music=document.getElementById("music");
+
+window.onload=function(){
+
+music.volume=0.8;
+
+music.play().catch(()=>{});
+
+startHearts();
+startPetals();
+
+setInterval(()=>{
+if(!music.paused){
+burstConfetti();
+pulseCard();
+}
+},1400);
+
+};
+
+/* back */
+
+function goBack(){
+
+music.pause();
+window.location.href="index.html";
+
+}
+
+/* petals */
+
+function startPetals(){
+
+setInterval(()=>{
+
+const petal=document.createElement("div");
+
+petal.className="petal";
+petal.innerHTML="🌹";
+
+petal.style.left=Math.random()*100+"vw";
+petal.style.animationDuration=(5+Math.random()*5)+"s";
+
+document.body.appendChild(petal);
+
+setTimeout(()=>petal.remove(),8000);
+
+},400);
+
+}
+
+/* hearts */
+
+function startHearts(){
+
+setInterval(()=>{
+
+const heart=document.createElement("div");
+
+heart.className="heart";
+heart.innerHTML="❤️";
+
+heart.style.left=Math.random()*100+"vw";
+heart.style.animationDuration=(4+Math.random()*4)+"s";
+
+document.body.appendChild(heart);
+
+setTimeout(()=>heart.remove(),8000);
+
+},900);
+
+}
+
+/* confetti */
+
+function burstConfetti(){
+
+for(let i=0;i<30;i++){
+
+const confetti=document.createElement("div");
+
+confetti.className="confetti";
+
+confetti.style.left=Math.random()*100+"vw";
+
+confetti.style.background=
+["red","pink","white","gold"][Math.floor(Math.random()*4)];
+
+confetti.style.animationDuration=(3+Math.random()*2)+"s";
+
+document.body.appendChild(confetti);
+
+setTimeout(()=>confetti.remove(),5000);
+
+}
+
+}
+
+/* pulse */
+
+function pulseCard(){
+
+const card=document.querySelector(".card");
+
+card.style.transform="scale(1.04)";
+
+setTimeout(()=>{
+card.style.transform="scale(1)";
+},300);
+
+}
+
+</script>
+
+</body>
+</html>

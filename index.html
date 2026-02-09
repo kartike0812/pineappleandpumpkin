@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Will you be mine?</title>
+
+<style>
+
+/* Animated romantic gradient background */
+body {
+
+    margin: 0;
+    padding: 0;
+
+    background: linear-gradient(-45deg, #e6a4b4, #f3c6cf, #f8d7da, #e6a4b4);
+    background-size: 400% 400%;
+
+    animation: gradientMove 12s ease infinite;
+
+    height: 100vh;
+    font-family: Arial, sans-serif;
+    overflow: hidden;
+}
+
+@keyframes gradientMove {
+
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+
+}
+
+/* Floating hearts */
+.heart {
+
+    position: fixed;
+    bottom: -20px;
+    font-size: 20px;
+    animation: floatUp linear forwards;
+    pointer-events: none;
+}
+
+@keyframes floatUp {
+
+    to {
+        transform: translateY(-110vh);
+        opacity: 0;
+    }
+
+}
+
+/* Center card */
+.card {
+
+    background: white;
+    width: 350px;
+    padding: 25px;
+    border-radius: 20px;
+
+    box-shadow:
+    0px 10px 25px rgba(0,0,0,0.2),
+    0 0 30px rgba(255,255,255,0.3);
+
+    text-align: center;
+
+    position: absolute;
+    left: 50%;
+    top: 50%;
+
+    transform: translate(-50%, -50%);
+
+    animation:
+    fadeIn 1s ease,
+    floatCard 4s ease-in-out infinite;
+}
+
+/* Entrance animation */
+@keyframes fadeIn {
+
+    from {
+        opacity: 0;
+        transform: translate(-50%, -60%);
+    }
+
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+
+}
+
+/* Floating card */
+@keyframes floatCard {
+
+    0% { transform: translate(-50%, -50%) translateY(0px); }
+    50% { transform: translate(-50%, -50%) translateY(-10px); }
+    100% { transform: translate(-50%, -50%) translateY(0px); }
+
+}
+
+/* GIF */
+.gif-container img {
+
+    width: 130px;
+}
+
+/* Text */
+h1 {
+
+    font-size: 24px;
+}
+
+p {
+
+    font-size: 14px;
+    color: #444;
+}
+
+/* YES button */
+#yesBtn {
+
+    background: #ff4d6d;
+    color: white;
+
+    border: none;
+    padding: 12px 28px;
+
+    border-radius: 25px;
+    font-size: 16px;
+
+    cursor: pointer;
+
+    margin-top: 20px;
+
+    box-shadow: 0 0 10px rgba(255,77,109,0.6);
+
+    transition: 0.3s;
+}
+
+#yesBtn:hover {
+
+    transform: scale(1.1);
+
+    box-shadow: 0 0 20px rgba(255,77,109,0.9);
+}
+
+/* NO button (Flash mode) */
+#noBtn {
+
+    position: fixed;
+
+    background: #4361ee;
+    color: white;
+
+    border: none;
+    padding: 12px 28px;
+
+    border-radius: 25px;
+    font-size: 16px;
+
+    cursor: pointer;
+
+    z-index: 9999;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="card">
+
+<div class="gif-container">
+<img src="bubu-dudu.gif">
+</div>
+
+<h1>Will you be mine 🥺?</h1>
+
+<p>
+I know mumma choosed us for each other when we were not even looking for each other,
+But now I want to spend every second with you my pineapple ❤️
+</p>
+
+<button id="yesBtn" onclick="goNextPage()">YES ❤️</button>
+
+</div>
+
+<button id="noBtn">NO 💔</button>
+
+<audio id="clickSound" src="click.mp3"></audio>
+
+<script>
+
+const noBtn = document.getElementById("noBtn");
+const yesBtn = document.getElementById("yesBtn");
+
+const escapeRadius = 150;
+
+/* PERFECT starting alignment */
+function setInitialPosition() {
+
+    const yesRect = yesBtn.getBoundingClientRect();
+
+    const gap = 20;
+
+    const startX = yesRect.right + gap;
+    const startY = yesRect.top;
+
+    noBtn.style.left = startX + "px";
+    noBtn.style.top = startY + "px";
+}
+
+/* FLASH teleport */
+function teleport() {
+
+    const btnWidth = noBtn.offsetWidth;
+    const btnHeight = noBtn.offsetHeight;
+
+    const maxX = window.innerWidth - btnWidth;
+    const maxY = window.innerHeight - btnHeight;
+
+    const newX = Math.random() * maxX;
+    const newY = Math.random() * maxY;
+
+    noBtn.style.left = newX + "px";
+    noBtn.style.top = newY + "px";
+}
+
+/* Detect cursor proximity */
+document.addEventListener("mousemove", function(e) {
+
+    const rect = noBtn.getBoundingClientRect();
+
+    const centerX = rect.left + rect.width/2;
+    const centerY = rect.top + rect.height/2;
+
+    const dx = e.clientX - centerX;
+    const dy = e.clientY - centerY;
+
+    const distance = Math.sqrt(dx*dx + dy*dy);
+
+    if(distance < escapeRadius) {
+
+        teleport();
+
+    }
+
+});
+
+/* Floating hearts generator */
+function createHeart(){
+
+    const heart = document.createElement("div");
+
+    heart.className = "heart";
+    heart.innerHTML = "❤️";
+
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.animationDuration = (4 + Math.random()*4) + "s";
+
+    document.body.appendChild(heart);
+
+    setTimeout(()=>heart.remove(), 8000);
+}
+
+setInterval(createHeart, 800);
+
+/* Run on load */
+window.onload = setInitialPosition;
+
+/* YES button */
+function goNextPage() {
+
+    document.getElementById("clickSound").play();
+
+    alert("I knew it! ❤️");
+
+    window.location.href = "next.html";
+}
+
+</script>
+
+</body>
+</html>

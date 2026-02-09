@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Something for You ❤️</title>
+
+<style>
+
+body{
+margin:0;
+padding:0;
+background:#f3e4cf;
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+font-family:Georgia, serif;
+overflow:hidden;
+}
+
+.card{
+background:#e6a4b4;
+width:800px;
+max-width:95%;
+padding:40px;
+border-radius:20px;
+box-shadow:0 20px 40px rgba(0,0,0,0.2);
+text-align:center;
+}
+
+.hidden{display:none;}
+
+.gift-container{
+display:flex;
+gap:30px;
+justify-content:center;
+}
+
+.gift-box{
+background:#f4c2cc;
+width:180px;
+height:150px;
+border-radius:15px;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+cursor:pointer;
+transition:.3s;
+}
+
+.gift-box:hover{
+transform:scale(1.05);
+}
+
+.gift-box img{
+width:70px;
+margin-bottom:10px;
+}
+
+button{
+background:red;
+color:white;
+border:none;
+padding:10px 25px;
+border-radius:20px;
+cursor:pointer;
+margin-top:15px;
+}
+
+/* quiz */
+
+.quiz-box{
+background:#f4c2cc;
+padding:20px;
+border-radius:15px;
+width:400px;
+margin:auto;
+}
+
+.option{
+background:white;
+padding:12px;
+margin:10px 0;
+border-radius:8px;
+cursor:pointer;
+}
+
+.option:hover{
+background:#ff4d6d;
+color:white;
+}
+
+/* agreement */
+
+.agreement-box{
+background:#efeacb;
+padding:20px;
+border-radius:15px;
+width:400px;
+margin:auto;
+text-align:left;
+}
+
+canvas{
+border:2px solid #e6a4b4;
+border-radius:10px;
+background:white;
+cursor:crosshair;
+}
+
+/* letter */
+
+.letter-paper{
+background:#efeacb;
+width:90%;
+max-width:600px;
+height:60vh;
+padding:25px;
+border-radius:10px;
+margin:auto;
+font-family:cursive;
+font-size:16px;
+line-height:1.6;
+overflow-y:auto;
+white-space:pre-wrap;
+text-align:left;
+}
+
+/* envelope */
+
+.envelope{
+width:200px;
+height:130px;
+background:#ffb6c1;
+margin:auto;
+cursor:pointer;
+}
+
+.flap{
+width:100%;
+height:100%;
+background:#ff8fa3;
+clip-path:polygon(0 0,100% 0,50% 60%);
+transition:.5s;
+}
+
+.envelope.open .flap{
+transform:rotateX(180deg);
+}
+
+/* popup */
+
+.popup{
+position:fixed;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%) scale(0);
+background:white;
+padding:20px;
+border-radius:15px;
+transition:.3s;
+z-index:1000;
+}
+
+.popup.show{
+transform:translate(-50%,-50%) scale(1);
+}
+
+.overlay{
+position:fixed;
+width:100%;
+height:100%;
+background:rgba(0,0,0,.4);
+display:none;
+}
+
+.overlay.show{
+display:block;
+}
+
+/* petals */
+
+.petal{
+position:fixed;
+top:-20px;
+font-size:20px;
+pointer-events:none;
+animation:fall linear forwards;
+z-index:999;
+}
+
+@keyframes fall{
+to{
+transform:translateY(110vh) rotate(360deg);
+opacity:0.8;
+}
+}
+
+</style>
+</head>
+<body>
+
+<div class="card">
+
+<!-- Gift Page -->
+
+<div id="giftPage">
+
+<h1>Something for You ❤️</h1>
+
+<div class="gift-container">
+
+<div class="gift-box" onclick="openQuiz()">
+<img src="tkthao219-bubududu.gif">
+<p>Gift 1</p>
+</div>
+
+<div class="gift-box" onclick="openAgreement()">
+<img src="bubu-bubu-dudu.gif">
+<p>Gift 2</p>
+</div>
+
+<div class="gift-box" onclick="openLetterPage()">
+<img src="bubu-dudu-sseeyall.gif">
+<p>Gift 3</p>
+</div>
+
+</div>
+
+<!-- FINALLY BUTTON ADDED HERE -->
+<button onclick="openFinallyPage()">FINALLY ❤️</button>
+
+</div>
+
+<!-- Quiz Page -->
+
+<div id="quizPage" class="hidden">
+
+<h1>Quiz for you Ans fas fas 🥺</h1>
+
+<div class="quiz-box">
+
+<p id="question"></p>
+
+<div id="options"></div>
+
+</div>
+
+<button onclick="goBack()">← BACK</button>
+
+</div>
+
+<!-- Agreement Page -->
+
+<div id="agreementPage" class="hidden">
+
+<h1>Forever Agreement 💍</h1>
+
+<div class="agreement-box">
+
+This Forever Marriage Agreement confirms that we belong to each other forever ❤️
+
+<br><br>
+
+I promise to love you endlessly 💖  
+<br>I promise to protect you always 🛡  
+<br>I promise to stay loyal forever 🤝  
+<br>I promise to never leave you 💍  
+
+<br><br>
+
+Signature:
+
+<canvas id="signaturePad" width="350" height="150"></canvas>
+
+<br>
+
+<button onclick="clearSignature()">Clear</button>
+<button onclick="signAgreement()">Sign ❤️</button>
+
+</div>
+
+<button onclick="goBack()">← BACK</button>
+
+</div>
+
+<!-- Letter Page -->
+
+<div id="letterPage" class="hidden">
+
+<h1>A Letter For You 🥺</h1>
+
+<div id="envelopeContainer">
+
+<div class="envelope" onclick="openEnvelope()">
+<div class="flap"></div>
+</div>
+
+</div>
+
+<div id="letterContent" class="letter-paper hidden">
+<span id="letterText"></span>
+</div>
+
+<button onclick="goBack()">← BACK</button>
+
+</div>
+
+</div>
+
+<div class="overlay" id="overlay"></div>
+
+<div class="popup" id="popup">
+<p id="popupText"></p>
+<button onclick="closePopup()">OK ❤️</button>
+</div>
+
+<audio id="music" src="romantic.mp3" loop></audio>
+
+<script>
+
+/* gift tracking */
+
+let gift1Opened=false;
+let gift2Opened=false;
+let gift3Opened=false;
+
+/* references */
+
+const giftPage=document.getElementById("giftPage");
+const quizPage=document.getElementById("quizPage");
+const agreementPage=document.getElementById("agreementPage");
+const letterPage=document.getElementById("letterPage");
+
+const question=document.getElementById("question");
+const options=document.getElementById("options");
+
+const popup=document.getElementById("popup");
+const overlay=document.getElementById("overlay");
+const popupText=document.getElementById("popupText");
+
+const music=document.getElementById("music");
+
+const letterText=document.getElementById("letterText");
+
+/* navigation */
+
+function hideAll(){
+giftPage.classList.add("hidden");
+quizPage.classList.add("hidden");
+agreementPage.classList.add("hidden");
+letterPage.classList.add("hidden");
+}
+
+function goBack(){
+
+music.pause();
+
+hideAll();
+giftPage.classList.remove("hidden");
+
+currentQuestion=0;
+
+}
+
+/* popup */
+
+function showPopup(msg){
+popupText.innerText=msg;
+popup.classList.add("show");
+overlay.classList.add("show");
+}
+
+function closePopup(){
+popup.classList.remove("show");
+overlay.classList.remove("show");
+}
+
+/* FINALLY BUTTON FUNCTION */
+
+function openFinallyPage(){
+
+if(gift1Opened && gift2Opened && gift3Opened){
+
+window.location.href="forever.html";
+
+}
+else{
+
+showPopup("Pehle sare gift to khol lo cutie ❤️");
+
+}
+
+}
+
+/* quiz */
+
+const questions=[
+
+{
+question:"Is relationship me kiski chalti hai👑?",
+options:["Obviously Pumpkin","Me(shreya)","Kisi ki nahi"],
+correct:1,
+responses:["Meri to bohot chalti hai 😌",null,"Oh really? 🤨"]
+},
+
+{
+question:"Kon sabse jyda sundar hai 💞?",
+options:["Always Pumpkin","No One","Me(shreya)"],
+correct:0,
+responses:[null,"Achha 😏","Chal Jhooti 😂"]
+},
+
+{
+question:"Where i am going to spend the rest of my life 🥺?",
+options:["Paris","In shreya's Heart& arms ❤️","On Mars"],
+correct:1,
+responses:["No ❌",null,"Wrong 😤"]
+}
+
+];
+
+let currentQuestion=0;
+
+function openQuiz(){
+
+gift1Opened=true;
+
+hideAll();
+quizPage.classList.remove("hidden");
+showQuestion();
+
+}
+
+function showQuestion(){
+
+let q=questions[currentQuestion];
+
+question.innerText=q.question;
+
+options.innerHTML="";
+
+q.options.forEach((opt,index)=>{
+
+let div=document.createElement("div");
+div.className="option";
+div.innerText=opt;
+
+div.onclick=function(){
+
+if(q.responses[index])
+showPopup(q.responses[index]);
+
+if(index===q.correct){
+
+setTimeout(()=>{
+
+currentQuestion++;
+
+if(currentQuestion<questions.length)
+showQuestion();
+else{
+
+question.innerText="7 crore ,Yay! You passed the test! ummmm cutuu guddd !!  ❤️";
+options.innerHTML="";
+
+}
+
+},500);
+
+}
+
+};
+
+options.appendChild(div);
+
+});
+
+}
+
+/* agreement */
+
+function openAgreement(){
+
+gift2Opened=true;
+
+hideAll();
+agreementPage.classList.remove("hidden");
+
+}
+
+let canvas=document.getElementById("signaturePad");
+let ctx=canvas.getContext("2d");
+let drawing=false;
+
+canvas.onmousedown=e=>{
+drawing=true;
+ctx.beginPath();
+ctx.moveTo(e.offsetX,e.offsetY);
+};
+
+canvas.onmouseup=()=>drawing=false;
+
+canvas.onmousemove=e=>{
+if(!drawing)return;
+ctx.lineTo(e.offsetX,e.offsetY);
+ctx.stroke();
+};
+
+function clearSignature(){
+ctx.clearRect(0,0,canvas.width,canvas.height);
+}
+
+function signAgreement(){
+
+let data=ctx.getImageData(0,0,canvas.width,canvas.height).data;
+
+let empty=true;
+
+for(let i=0;i<data.length;i+=4){
+
+if(data[i+3]!=0){
+empty=false;
+break;
+}
+
+}
+
+if(empty)
+showPopup("Sign Kro pehle cutiiiee ❤️✍️");
+else
+showPopup("You Are Officially Mine Forever Cutu Bubbu ❤️💍");
+
+}
+
+/* Gift 3 */
+
+let letterIndex=0;
+let typingInterval=null;
+let petalsInterval=null;
+
+const letterFull=`hi baby,
+To dekho, kisi ne bola tha na ki main propose nahi karta hoon. I mean maine acche se propose nahi kiya hai. Although baby maine bahut baar tumhe propose kiya hai bahut acche acche tareekon se, but still dekho Valentine bhi hai, mere life ka pehla Valentine hai, tumhari life ka bhi pehla Valentine hai. So maine socha ki tumhe bahut acche tareeke se propose kiya jaaye.
+
+To here it is, my proposal letter.
+
+Well to dekho, haan tum blush kar sakti ho. Maine apni mehnat se banaya hai yaar, poora ka poora ye saara. Haan dekho itna smart nahi hoon ki poora code khud kar doon. I took help of YouTube, AI and a lot of things. But bhai bahut mehnat lagi hai meri. So yeah, you can give me bahut saara pyaari pyaari appreciation and credit also.
+
+So yeah, dekho baby I really really really really love you so much and that's why I am making this beautiful thing for you and who knows bhai kisne socha tha ki matlab wo class mein ladne wale do bachche kabhi itne close aayenge ek dusre ke. Dekho wo hum, hum nahi samajh paaye ki wo kya tha. Actually it was mama's tactic to get us together coz unhe pata tha what I need aur unhe pata tha what you need, to wo hum dono ko uthakar laayi aur tab hum dono aise to baat karne se raheek dusre se, to mama ne just choose that way aur ladaai karai phir baat karai and rest is history. I found a perfect most perfect partner of my life bhai aur yaa you also found the best best best best guy in the whole universe matlab kahin nahi mil sakta aisa banda you found that.
+
+So yeah and so baby this is my proposal letter for you.
+
+So I really really love you so much baby and I'll always love you and I'll always keep my promise in future too. I don't know main kya bol raha hoon but I just want to say so I'm just saying bahut maze karenge hum poori zindagi hamesha saath rahenge, khush rahenge, ladte jhagadte bhi rahenge aur matlab thoda thoda sad sad bhi reh lenge yaar ab matlab poori zindagi aur kya karenge hanste hanste na?
+
+What matter is ki hum hamesha saath rahenge aur main hamesha tumse pyaar karta rahunga.
+
+So my cutu, my pineapple, my baby, my moti, my sugar plum, my sweetu, mera bachha…
+
+Will you be my Valentine for forever?
+Will you be my wife for forever?
+Will you be my girlfriend for forever?
+Will you be my last?
+Will you be my forever?
+
+Baby, I love you so much. I love you the most. I love you the mostest.
+
+So it's been 11 months. So ek saal hi hone wala hai and those 11 months are my best months of my life. Aur aage bhi poori zindagi best hi hone wali hai.
+
+So I love you so much and I love you to eternity. I love you to infinity. I love you so much.
+Forever yours,
+Pumpkin`;
+
+function openLetterPage(){
+
+gift3Opened=true;
+
+hideAll();
+letterPage.classList.remove("hidden");
+
+music.play();
+startPetals();
+
+}
+
+function openEnvelope(){
+
+document.querySelector(".envelope").classList.add("open");
+
+setTimeout(()=>{
+
+document.getElementById("envelopeContainer").style.display="none";
+
+document.getElementById("letterContent").classList.remove("hidden");
+
+startTyping();
+
+},600);
+
+}
+
+function startTyping(){
+
+if(typingInterval)return;
+
+typingInterval=setInterval(()=>{
+
+if(letterIndex<letterFull.length){
+
+letterText.innerHTML+=letterFull.charAt(letterIndex);
+
+letterIndex++;
+
+letterText.parentElement.scrollTop=
+letterText.parentElement.scrollHeight;
+
+}
+else clearInterval(typingInterval);
+
+},20);
+
+}
+
+function startPetals(){
+
+if(petalsInterval)return;
+
+petalsInterval=setInterval(createPetal,300);
+
+}
+
+function createPetal(){
+
+let petal=document.createElement("div");
+
+petal.className="petal";
+
+petal.innerHTML="🌹";
+
+petal.style.left=Math.random()*100+"vw";
+
+petal.style.animationDuration=(5+Math.random()*5)+"s";
+
+document.body.appendChild(petal);
+
+setTimeout(()=>petal.remove(),8000);
+
+}
+
+</script>
+
+</body>
+</html>
