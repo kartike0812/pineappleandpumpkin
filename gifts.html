@@ -273,7 +273,62 @@ I promise to love you endlessly 💖
 
 Signature:
 
-<canvas id="signaturePad" width="350" height="150"></canvas>
+let canvas=document.getElementById("signaturePad");
+let ctx=canvas.getContext("2d");
+let drawing=false;
+
+/* ===== MOUSE SUPPORT ===== */
+
+canvas.addEventListener("mousedown",(e)=>{
+drawing=true;
+ctx.beginPath();
+ctx.moveTo(e.offsetX,e.offsetY);
+});
+
+canvas.addEventListener("mouseup",()=>{
+drawing=false;
+});
+
+canvas.addEventListener("mousemove",(e)=>{
+if(!drawing)return;
+ctx.lineTo(e.offsetX,e.offsetY);
+ctx.stroke();
+});
+
+/* ===== TOUCH SUPPORT (PHONE FIX) ===== */
+
+canvas.addEventListener("touchstart",(e)=>{
+e.preventDefault();
+drawing=true;
+
+let rect=canvas.getBoundingClientRect();
+let touch=e.touches[0];
+
+ctx.beginPath();
+ctx.moveTo(
+touch.clientX-rect.left,
+touch.clientY-rect.top
+);
+});
+
+canvas.addEventListener("touchend",()=>{
+drawing=false;
+});
+
+canvas.addEventListener("touchmove",(e)=>{
+e.preventDefault();
+if(!drawing)return;
+
+let rect=canvas.getBoundingClientRect();
+let touch=e.touches[0];
+
+ctx.lineTo(
+touch.clientX-rect.left,
+touch.clientY-rect.top
+);
+
+ctx.stroke();
+});
 
 <br>
 
@@ -652,3 +707,4 @@ setTimeout(()=>petal.remove(),8000);
 
 </body>
 </html>
+
