@@ -108,7 +108,9 @@ border:2px solid #e6a4b4;
 border-radius:10px;
 background:white;
 cursor:crosshair;
+touch-action:none;   /* IMPORTANT PHONE FIX */
 }
+
 
 /* letter */
 
@@ -273,62 +275,71 @@ I promise to love you endlessly 💖
 
 Signature:
 
-let canvas=document.getElementById("signaturePad");
-let ctx=canvas.getContext("2d");
-let drawing=false;
+let canvas = document.getElementById("signaturePad");
+let ctx = canvas.getContext("2d");
 
-/* ===== MOUSE SUPPORT ===== */
+let drawing = false;
 
-canvas.addEventListener("mousedown",(e)=>{
-drawing=true;
+/* make drawing smoother */
+ctx.lineWidth = 2;
+ctx.lineCap = "round";
+ctx.strokeStyle = "#000";
+
+/* function to get correct position */
+function getPosition(e) {
+
+let rect = canvas.getBoundingClientRect();
+
+if (e.touches) {
+return {
+x: e.touches[0].clientX - rect.left,
+y: e.touches[0].clientY - rect.top
+};
+}
+else {
+return {
+x: e.clientX - rect.left,
+y: e.clientY - rect.top
+};
+}
+
+}
+
+/* start drawing */
+function startDrawing(e) {
+drawing = true;
+let pos = getPosition(e);
 ctx.beginPath();
-ctx.moveTo(e.offsetX,e.offsetY);
-});
+ctx.moveTo(pos.x, pos.y);
+}
 
-canvas.addEventListener("mouseup",()=>{
-drawing=false;
-});
+/* draw */
+function draw(e) {
+if (!drawing) return;
 
-canvas.addEventListener("mousemove",(e)=>{
-if(!drawing)return;
-ctx.lineTo(e.offsetX,e.offsetY);
-ctx.stroke();
-});
-
-/* ===== TOUCH SUPPORT (PHONE FIX) ===== */
-
-canvas.addEventListener("touchstart",(e)=>{
 e.preventDefault();
-drawing=true;
 
-let rect=canvas.getBoundingClientRect();
-let touch=e.touches[0];
-
-ctx.beginPath();
-ctx.moveTo(
-touch.clientX-rect.left,
-touch.clientY-rect.top
-);
-});
-
-canvas.addEventListener("touchend",()=>{
-drawing=false;
-});
-
-canvas.addEventListener("touchmove",(e)=>{
-e.preventDefault();
-if(!drawing)return;
-
-let rect=canvas.getBoundingClientRect();
-let touch=e.touches[0];
-
-ctx.lineTo(
-touch.clientX-rect.left,
-touch.clientY-rect.top
-);
-
+let pos = getPosition(e);
+ctx.lineTo(pos.x, pos.y);
 ctx.stroke();
-});
+}
+
+/* stop drawing */
+function stopDrawing() {
+drawing = false;
+}
+
+/* mouse events */
+canvas.addEventListener("mousedown", startDrawing);
+canvas.addEventListener("mousemove", draw);
+canvas.addEventListener("mouseup", stopDrawing);
+canvas.addEventListener("mouseleave", stopDrawing);
+
+/* touch events (PHONE FIX) */
+canvas.addEventListener("touchstart", startDrawing, { passive:false });
+canvas.addEventListener("touchmove", draw, { passive:false });
+canvas.addEventListener("touchend", stopDrawing);
+
 
 <br>
 
@@ -707,4 +718,5 @@ setTimeout(()=>petal.remove(),8000);
 
 </body>
 </html>
+
 
