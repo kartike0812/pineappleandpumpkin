@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#e6a4b4">
 <title>You are my forever ❤️</title>
 
 <style>
@@ -229,6 +230,46 @@ opacity:0;
 }
 }
 
+
+/* ================= MOBILE ONLY ================= */
+
+@media (max-width:600px){
+
+.card{
+
+width:95% !important;
+padding:20px !important;
+
+}
+
+h1{
+
+font-size:24px !important;
+
+}
+
+p{
+
+font-size:15px !important;
+
+}
+
+img{
+
+width:80% !important;
+max-width:280px !important;
+
+}
+
+button{
+
+width:100% !important;
+font-size:16px !important;
+
+}
+
+}
+
 </style>
 </head>
 
@@ -241,17 +282,15 @@ opacity:0;
 <img src="your-photo.jpeg" alt="Our Photo">
 
 <p>
-Moti, actually we don’t need any Valentine’s Day or any kind of special day to celebrate our love. Our every day is Valentine’s Day. Humara har din celebration hai, har din pyara hai. Kabhi hum haste haste celebrate karte hain, kabhi thode sad moments mein bhi saath rehkar usse khushi mein badal dete hain. That’s just us. Hum duniya se alag couples hain. We are the special ones, the selected ones, the bestest ones.
-    I love you more than words can say ❤️  .  
-Thank you for being my peace, my smile, my love.  
-This Valentine's Day and every day after, I'm grateful to call you mine forever.
+Moti, actually we don’t need any Valentine’s Day or any kind of special day to celebrate our love. Our every day is Valentine’s Day. Humara har din celebration hai, har din pyara hai.
+I love you more than words can say ❤️  
+Thank you for being my peace, my smile, my love.
 </p>
 
 <button onclick="goBack()">← BACK</button>
 
 </div>
 
-<!-- YOUR CUSTOM MUSIC FILE -->
 <audio id="music" src="your-music.mp3" loop></audio>
 
 <script>
@@ -268,19 +307,22 @@ startHearts();
 startPetals();
 
 setInterval(()=>{
+
 if(!music.paused){
+
 burstConfetti();
 pulseCard();
+
 }
+
 },1400);
 
 };
 
-/* back */
-
 function goBack(){
 
 music.pause();
+
 window.location.href="index.html";
 
 }
@@ -363,7 +405,9 @@ const card=document.querySelector(".card");
 card.style.transform="scale(1.04)";
 
 setTimeout(()=>{
+
 card.style.transform="scale(1)";
+
 },300);
 
 }
