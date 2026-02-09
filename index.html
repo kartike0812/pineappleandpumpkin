@@ -78,6 +78,22 @@ body {
     100% { transform: translate(-50%, -50%) translateY(0px); }
 }
 
+/* SHAKE animation */
+@keyframes shakeScreen {
+
+0% { transform: translate(-50%, -50%) translate(0px, 0px); }
+20% { transform: translate(-50%, -50%) translate(-6px, 6px); }
+40% { transform: translate(-50%, -50%) translate(6px, -6px); }
+60% { transform: translate(-50%, -50%) translate(-6px, 0px); }
+80% { transform: translate(-50%, -50%) translate(6px, 6px); }
+100% { transform: translate(-50%, -50%) translate(0px, 0px); }
+
+}
+
+.shake {
+animation: shakeScreen 0.4s;
+}
+
 .gif-container img {
     width: 130px;
 }
@@ -106,7 +122,6 @@ p {
 
 #yesBtn:hover {
     transform: scale(1.1);
-    box-shadow: 0 0 20px rgba(255,77,109,0.9);
 }
 
 #noBtn {
@@ -133,21 +148,17 @@ padding:20px !important;
 width:110px !important;
 }
 
-button{
-width:auto !important;
-margin:10px 5px;
+.mobile-buttons{
+display:flex;
+justify-content:center;
+gap:10px;
+margin-top:10px;
 }
 
 #noBtn{
 position:relative !important;
 left:auto !important;
 top:auto !important;
-}
-
-.mobile-buttons{
-display:flex;
-justify-content:center;
-flex-wrap:wrap;
 }
 
 }
@@ -163,7 +174,7 @@ flex-wrap:wrap;
 <img src="bubu-dudu.gif">
 </div>
 
-<h1>Will you be mine 🥺?</h1>
+<h1 id="mainText">Will you be mine 🥺?</h1>
 
 <p>
 I know mumma choosed us for each other when we were not even looking for each other,
@@ -183,112 +194,141 @@ But now I want to spend every second with you my pineapple ❤️
 
 const noBtn = document.getElementById("noBtn");
 const yesBtn = document.getElementById("yesBtn");
+const card = document.querySelector(".card");
+const text = document.getElementById("mainText");
 
 const escapeRadius = 150;
-
 let noClickCount = 0;
 
+/* detect mobile */
 function isMobile(){
-    return window.innerWidth <= 600;
+return window.innerWidth <= 600;
 }
 
-/* DESKTOP BEHAVIOR (UNCHANGED) */
-function setInitialPosition() {
+/* DESKTOP LOGIC (UNCHANGED) */
+function setInitialPosition(){
 
-    if(isMobile()) return;
+if(isMobile()) return;
 
-    const yesRect = yesBtn.getBoundingClientRect();
+const yesRect = yesBtn.getBoundingClientRect();
+const gap = 20;
 
-    const gap = 20;
-
-    noBtn.style.left = yesRect.right + gap + "px";
-    noBtn.style.top = yesRect.top + "px";
+noBtn.style.left = yesRect.right + gap + "px";
+noBtn.style.top = yesRect.top + "px";
 }
 
-function teleport() {
+function teleport(){
 
-    if(isMobile()) return;
+if(isMobile()) return;
 
-    const btnWidth = noBtn.offsetWidth;
-    const btnHeight = noBtn.offsetHeight;
+const btnWidth = noBtn.offsetWidth;
+const btnHeight = noBtn.offsetHeight;
 
-    const maxX = window.innerWidth - btnWidth;
-    const maxY = window.innerHeight - btnHeight;
+const maxX = window.innerWidth - btnWidth;
+const maxY = window.innerHeight - btnHeight;
 
-    noBtn.style.left = Math.random() * maxX + "px";
-    noBtn.style.top = Math.random() * maxY + "px";
+noBtn.style.left = Math.random() * maxX + "px";
+noBtn.style.top = Math.random() * maxY + "px";
 }
 
-document.addEventListener("mousemove", function(e) {
+document.addEventListener("mousemove", function(e){
 
-    if(isMobile()) return;
+if(isMobile()) return;
 
-    const rect = noBtn.getBoundingClientRect();
+const rect = noBtn.getBoundingClientRect();
 
-    const centerX = rect.left + rect.width/2;
-    const centerY = rect.top + rect.height/2;
+const centerX = rect.left + rect.width/2;
+const centerY = rect.top + rect.height/2;
 
-    const dx = e.clientX - centerX;
-    const dy = e.clientY - centerY;
+const dx = e.clientX - centerX;
+const dy = e.clientY - centerY;
 
-    const distance = Math.sqrt(dx*dx + dy*dy);
+const distance = Math.sqrt(dx*dx + dy*dy);
 
-    if(distance < escapeRadius) teleport();
+if(distance < escapeRadius) teleport();
 
 });
 
-/* MOBILE BEHAVIOR */
+/* MOBILE EMOTIONAL LOGIC */
+
+const messages = [
+"Are you sure? 🥺",
+"Think again ❤️",
+"Don't break my heart 💔",
+"Last chance 😭",
+"You have no choice now 😌"
+];
+
 noBtn.addEventListener("click", function(){
 
-    if(!isMobile()) return;
+if(!isMobile()) return;
 
-    noClickCount++;
+noClickCount++;
 
-    let scale = 1 + (noClickCount * 0.3);
+/* SHAKE */
+card.classList.add("shake");
 
-    yesBtn.style.transform = `scale(${scale})`;
+setTimeout(()=>{
+card.classList.remove("shake");
+},400);
 
-    if(noClickCount >= 5){
+/* text change */
+if(noClickCount <= messages.length){
+text.innerText = messages[noClickCount-1];
+}
 
-        yesBtn.style.transform = "scale(1)";
-        yesBtn.style.width = "100%";
-        yesBtn.style.fontSize = "24px";
-        yesBtn.style.padding = "20px";
-        yesBtn.innerHTML = "YES ❤️ (Only option left 😌)";
+/* grow YES */
+let scale = 1 + (noClickCount * 0.3);
+yesBtn.style.transform = `scale(${scale})`;
 
-        noBtn.style.display = "none";
-    }
+/* final takeover */
+if(noClickCount >= 5){
+
+yesBtn.style.transform="scale(1)";
+yesBtn.style.width="100%";
+yesBtn.style.fontSize="24px";
+yesBtn.style.padding="20px";
+
+yesBtn.innerHTML="YES ❤️ (Only option left 😌)";
+
+text.innerText="I knew you loved me 😘";
+
+noBtn.style.display="none";
+
+}
 
 });
 
-/* Floating hearts */
+/* floating hearts */
 function createHeart(){
 
-    const heart = document.createElement("div");
+const heart=document.createElement("div");
 
-    heart.className = "heart";
-    heart.innerHTML = "❤️";
+heart.className="heart";
+heart.innerHTML="❤️";
 
-    heart.style.left = Math.random() * 100 + "vw";
-    heart.style.animationDuration = (4 + Math.random()*4) + "s";
+heart.style.left=Math.random()*100+"vw";
+heart.style.animationDuration=(4+Math.random()*4)+"s";
 
-    document.body.appendChild(heart);
+document.body.appendChild(heart);
 
-    setTimeout(()=>heart.remove(), 8000);
+setTimeout(()=>heart.remove(),8000);
+
 }
 
-setInterval(createHeart, 800);
+setInterval(createHeart,800);
 
-window.onload = setInitialPosition;
+window.onload=setInitialPosition;
 
 /* YES BUTTON */
-function goNextPage() {
+function goNextPage(){
 
-    document.getElementById("clickSound").play().catch(()=>{});
+document.getElementById("clickSound").play().catch(()=>{});
 
-    alert("I knew it! ❤️");
+alert("I knew it! ❤️");
 
-    window.location.href = "next.html";
+window.location.href="next.html";
+
 }
 
 </script>
