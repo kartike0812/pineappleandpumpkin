@@ -492,7 +492,11 @@ agreementPage.classList.remove("hidden");
 
 }
 
+window.addEventListener("load", function(){
+
 let canvas = document.getElementById("signaturePad");
+if(!canvas) return;
+
 let ctx = canvas.getContext("2d");
 
 let drawing = false;
@@ -501,17 +505,17 @@ ctx.lineWidth = 2;
 ctx.lineCap = "round";
 ctx.strokeStyle = "#000";
 
-function getPosition(e) {
+function getPosition(e){
 
 let rect = canvas.getBoundingClientRect();
 
-if (e.touches) {
+if(e.touches){
 return {
 x: e.touches[0].clientX - rect.left,
 y: e.touches[0].clientY - rect.top
 };
 }
-else {
+else{
 return {
 x: e.clientX - rect.left,
 y: e.clientY - rect.top
@@ -520,38 +524,37 @@ y: e.clientY - rect.top
 
 }
 
-function startDrawing(e) {
+function startDrawing(e){
 drawing = true;
 let pos = getPosition(e);
 ctx.beginPath();
-ctx.moveTo(pos.x, pos.y);
+ctx.moveTo(pos.x,pos.y);
 }
 
-function draw(e) {
-if (!drawing) return;
+function draw(e){
+if(!drawing) return;
 e.preventDefault();
 let pos = getPosition(e);
-ctx.lineTo(pos.x, pos.y);
+ctx.lineTo(pos.x,pos.y);
 ctx.stroke();
 }
 
-function stopDrawing() {
+function stopDrawing(){
 drawing = false;
 }
 
+/* mouse */
 canvas.addEventListener("mousedown", startDrawing);
 canvas.addEventListener("mousemove", draw);
 canvas.addEventListener("mouseup", stopDrawing);
 canvas.addEventListener("mouseleave", stopDrawing);
 
-canvas.addEventListener("touchstart", startDrawing, { passive:false });
-canvas.addEventListener("touchmove", draw, { passive:false });
+/* touch */
+canvas.addEventListener("touchstart", startDrawing, {passive:false});
+canvas.addEventListener("touchmove", draw, {passive:false});
 canvas.addEventListener("touchend", stopDrawing);
 
-}
-
-}
-
+});
 if(empty)
 showPopup("Sign Kro pehle cutiiiee ❤️✍️");
 else
@@ -676,4 +679,5 @@ setTimeout(()=>petal.remove(),8000);
 
 </body>
 </html>
+
 
