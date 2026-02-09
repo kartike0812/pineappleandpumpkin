@@ -9,7 +9,7 @@
 <style>
 
 /* background */
-body {
+body{
 margin:0;
 padding:0;
 background:linear-gradient(-45deg,#e6a4b4,#f3c6cf,#f8d7da,#e6a4b4);
@@ -26,7 +26,7 @@ overflow:hidden;
 100%{background-position:0% 50%;}
 }
 
-/* floating hearts */
+/* hearts */
 .heart{
 position:fixed;
 bottom:-20px;
@@ -71,13 +71,12 @@ to{opacity:1;transform:translate(-50%,-50%);}
 50%{transform:translate(-50%,-50%) translateY(-10px);}
 }
 
-/* shake animation */
+/* shake */
 @keyframes shakeScreen{
 0%{transform:translate(-50%,-50%)}
-20%{transform:translate(-55%,-45%)}
-40%{transform:translate(-45%,-55%)}
-60%{transform:translate(-55%,-50%)}
-80%{transform:translate(-45%,-45%)}
+25%{transform:translate(-53%,-47%)}
+50%{transform:translate(-47%,-53%)}
+75%{transform:translate(-53%,-50%)}
 100%{transform:translate(-50%,-50%)}
 }
 
@@ -115,7 +114,7 @@ transition:all 0.3s;
 transform:scale(1.1);
 }
 
-/* IMPORTANT: desktop fixed position */
+/* desktop NO button */
 #noBtn{
 position:fixed;
 background:#4361ee;
@@ -128,7 +127,7 @@ cursor:pointer;
 z-index:9999;
 }
 
-/* mobile only */
+/* MOBILE ONLY */
 @media(max-width:600px){
 
 .card{
@@ -136,20 +135,19 @@ width:90%;
 padding:20px;
 }
 
-.gif-container img{
-width:110px;
+/* align buttons properly */
+#yesBtn{
+position:absolute;
+bottom:20px;
+left:15%;
+width:70%;
 }
 
 #noBtn{
 position:absolute;
-left:55%;
-top:75%;
-}
-
-#yesBtn{
-position:absolute;
+bottom:70px;
 left:15%;
-top:75%;
+width:70%;
 }
 
 }
@@ -176,7 +174,6 @@ But now I want to spend every second with you my pineapple ❤️
 
 </div>
 
-<!-- NO button OUTSIDE card (IMPORTANT FOR DESKTOP) -->
 <button id="noBtn">NO 💔</button>
 
 <audio id="clickSound" src="click.mp3"></audio>
@@ -188,15 +185,15 @@ const yesBtn=document.getElementById("yesBtn");
 const card=document.getElementById("card");
 const text=document.getElementById("mainText");
 
-const escapeRadius=150;
 let noClickCount=0;
+const escapeRadius=150;
 
 /* detect mobile */
 function isMobile(){
 return window.innerWidth<=600;
 }
 
-/* DESKTOP original behavior */
+/* DESKTOP original */
 function setInitialPosition(){
 
 if(isMobile()) return;
@@ -205,6 +202,7 @@ const yesRect=yesBtn.getBoundingClientRect();
 
 noBtn.style.left=(yesRect.right+20)+"px";
 noBtn.style.top=yesRect.top+"px";
+
 }
 
 function teleport(){
@@ -219,6 +217,7 @@ const maxY=window.innerHeight-btnHeight;
 
 noBtn.style.left=Math.random()*maxX+"px";
 noBtn.style.top=Math.random()*maxY+"px";
+
 }
 
 document.addEventListener("mousemove",function(e){
@@ -241,7 +240,7 @@ teleport();
 
 });
 
-/* MOBILE emotional logic */
+/* MOBILE emotional */
 const messages=[
 "Are you sure? 🥺",
 "Think again ❤️",
@@ -266,14 +265,16 @@ if(noClickCount<=messages.length){
 text.innerText=messages[noClickCount-1];
 }
 
-let scale=1+(noClickCount*0.3);
-yesBtn.style.transform=`scale(${scale})`;
+/* grow YES */
+yesBtn.style.transform=`scale(${1+(noClickCount*0.25)})`;
 
 if(noClickCount>=5){
 
 yesBtn.style.transform="scale(1)";
 yesBtn.style.width="70%";
-yesBtn.style.left="15%";
+yesBtn.style.fontSize="18px";
+
+yesBtn.innerHTML="YES ❤️ (Only option left 😌)";
 
 text.innerText="I knew you loved me 😘";
 
@@ -304,10 +305,12 @@ setInterval(createHeart,800);
 
 window.onload=setInitialPosition;
 
-/* YES button */
+/* YES button FIXED popup restored */
 function goNextPage(){
 
 document.getElementById("clickSound").play().catch(()=>{});
+
+alert("I knew it! ❤️");
 
 window.location.href="next.html";
 
