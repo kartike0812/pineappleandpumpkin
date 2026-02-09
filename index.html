@@ -3,316 +3,443 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#e6a4b4">
-<title>Will you be mine?</title>
+<title>Something for You ❤️</title>
 
 <style>
 
-/* background */
 body{
 margin:0;
 padding:0;
-background:linear-gradient(-45deg,#e6a4b4,#f3c6cf,#f8d7da,#e6a4b4);
-background-size:400% 400%;
-animation:gradientMove 12s ease infinite;
-height:100vh;
-font-family:Arial,sans-serif;
+background:#f3e4cf;
+min-height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+font-family:Georgia, serif;
 overflow:hidden;
 }
 
-@keyframes gradientMove{
-0%{background-position:0% 50%;}
-50%{background-position:100% 50%;}
-100%{background-position:0% 50%;}
-}
-
-/* hearts */
-.heart{
-position:fixed;
-bottom:-20px;
-font-size:20px;
-animation:floatUp linear forwards;
-pointer-events:none;
-}
-
-@keyframes floatUp{
-to{
-transform:translateY(-110vh);
-opacity:0;
-}
-}
-
-/* card */
 .card{
-background:white;
-width:350px;
-padding:25px;
+background:#e6a4b4;
+width:800px;
+max-width:95%;
+padding:40px;
 border-radius:20px;
-box-shadow:
-0 10px 25px rgba(0,0,0,0.2),
-0 0 30px rgba(255,255,255,0.3);
+box-shadow:0 20px 40px rgba(0,0,0,0.2);
 text-align:center;
-position:absolute;
-left:50%;
-top:50%;
-transform:translate(-50%,-50%);
-animation:
-fadeIn 1s ease,
-floatCard 4s ease-in-out infinite;
 }
 
-@keyframes fadeIn{
-from{opacity:0;transform:translate(-50%,-60%);}
-to{opacity:1;transform:translate(-50%,-50%);}
+.hidden{display:none;}
+
+.gift-container{
+display:flex;
+gap:30px;
+justify-content:center;
 }
 
-@keyframes floatCard{
-0%,100%{transform:translate(-50%,-50%) translateY(0);}
-50%{transform:translate(-50%,-50%) translateY(-10px);}
+.gift-box{
+background:#f4c2cc;
+width:180px;
+height:150px;
+border-radius:15px;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+cursor:pointer;
+transition:.3s;
 }
 
-/* shake */
-@keyframes shakeScreen{
-0%{transform:translate(-50%,-50%)}
-25%{transform:translate(-53%,-47%)}
-50%{transform:translate(-47%,-53%)}
-75%{transform:translate(-53%,-50%)}
-100%{transform:translate(-50%,-50%)}
+.gift-box:hover{
+transform:scale(1.05);
 }
 
-.shake{
-animation:shakeScreen 0.4s;
+.gift-box img{
+width:70px;
+margin-bottom:10px;
 }
 
-.gif-container img{
-width:130px;
+button{
+background:red;
+color:white;
+border:none;
+padding:12px 25px;
+border-radius:25px;
+cursor:pointer;
+margin-top:15px;
+max-width:100%;
+width:auto;
 }
 
-h1{
-font-size:24px;
+/* quiz */
+
+.quiz-box{
+background:#f4c2cc;
+padding:20px;
+border-radius:15px;
+width:400px;
+margin:auto;
 }
 
-p{
-font-size:14px;
-color:#444;
+.option{
+background:white;
+padding:12px;
+margin:10px 0;
+border-radius:8px;
+cursor:pointer;
 }
 
-#yesBtn{
+.option:hover{
 background:#ff4d6d;
 color:white;
-border:none;
-padding:12px 28px;
-border-radius:25px;
+}
+
+/* agreement */
+
+.agreement-box{
+background:#efeacb;
+padding:20px;
+border-radius:15px;
+width:400px;
+margin:auto;
+text-align:left;
+}
+
+canvas{
+border:2px solid #e6a4b4;
+border-radius:10px;
+background:white;
+touch-action:none;
+}
+
+/* letter */
+
+.letter-paper{
+background:#efeacb;
+width:90%;
+max-width:600px;
+height:60vh;
+padding:25px;
+border-radius:10px;
+margin:auto;
+font-family:cursive;
 font-size:16px;
+line-height:1.6;
+overflow-y:auto;
+white-space:pre-wrap;
+text-align:left;
+}
+
+/* envelope */
+
+.envelope{
+width:200px;
+height:130px;
+background:#ffb6c1;
+margin:auto;
 cursor:pointer;
-margin-top:20px;
-box-shadow:0 0 10px rgba(255,77,109,0.6);
-transition:all 0.3s;
 }
 
-#yesBtn:hover{
-transform:scale(1.1);
+.flap{
+width:100%;
+height:100%;
+background:#ff8fa3;
+clip-path:polygon(0 0,100% 0,50% 60%);
+transition:.5s;
 }
 
-/* desktop NO button */
-#noBtn{
+.envelope.open .flap{
+transform:rotateX(180deg);
+}
+
+/* popup */
+
+.popup{
 position:fixed;
-background:#4361ee;
-color:white;
-border:none;
-padding:12px 28px;
-border-radius:25px;
-font-size:16px;
-cursor:pointer;
-z-index:9999;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%) scale(0);
+background:white;
+padding:20px;
+border-radius:15px;
+transition:.3s;
+z-index:1000;
 }
 
-/* MOBILE ONLY */
-@media(max-width:600px){
+.popup.show{
+transform:translate(-50%,-50%) scale(1);
+}
+
+.overlay{
+position:fixed;
+width:100%;
+height:100%;
+background:rgba(0,0,0,.4);
+display:none;
+}
+
+.overlay.show{
+display:block;
+}
+
+/* petals */
+
+.petal{
+position:fixed;
+top:-20px;
+font-size:20px;
+pointer-events:none;
+animation:fall linear forwards;
+z-index:999;
+}
+
+@keyframes fall{
+to{
+transform:translateY(110vh) rotate(360deg);
+}
+}
+
+/* MOBILE FIX */
+
+@media (max-width:600px){
 
 .card{
 width:90%;
 padding:20px;
 }
 
-/* align buttons properly */
-#yesBtn{
-position:absolute;
-bottom:20px;
-left:15%;
-width:70%;
+button{
+width:90%;
+max-width:300px;
 }
 
-#noBtn{
-position:absolute;
-bottom:70px;
-left:15%;
-width:70%;
+.gift-container{
+flex-direction:column;
+align-items:center;
+}
+
+.quiz-box,
+.agreement-box{
+width:90%;
 }
 
 }
 
 </style>
 </head>
-
 <body>
 
-<div class="card" id="card">
+<div class="card">
 
-<div class="gif-container">
-<img src="bubu-dudu.gif">
+<div id="giftPage">
+
+<h1>Something for You ❤️</h1>
+
+<div class="gift-container">
+
+<div class="gift-box" onclick="openQuiz()">
+<img src="tkthao219-bubududu.gif">
+<p>Gift 1</p>
 </div>
 
-<h1 id="mainText">Will you be mine 🥺?</h1>
+<div class="gift-box" onclick="openAgreement()">
+<img src="bubu-bubu-dudu.gif">
+<p>Gift 2</p>
+</div>
 
-<p>
-I know mumma choosed us for each other when we were not even looking for each other,
-But now I want to spend every second with you my pineapple ❤️
-</p>
-
-<button id="yesBtn" onclick="goNextPage()">YES ❤️</button>
+<div class="gift-box" onclick="openLetterPage()">
+<img src="bubu-dudu-sseeyall.gif">
+<p>Gift 3</p>
+</div>
 
 </div>
 
-<button id="noBtn">NO 💔</button>
+<button onclick="openFinallyPage()">FINALLY ❤️</button>
 
-<audio id="clickSound" src="click.mp3"></audio>
+</div>
+
+<div id="quizPage" class="hidden">
+<h1>Quiz for you 🥺</h1>
+<div class="quiz-box">
+<p id="question"></p>
+<div id="options"></div>
+</div>
+<button onclick="goBack()">← BACK</button>
+</div>
+
+<div id="agreementPage" class="hidden">
+
+<h1>Forever Agreement 💍</h1>
+
+<div class="agreement-box">
+
+This Forever Marriage Agreement confirms that we belong to each other forever ❤️
+
+<br><br>
+
+I promise to love you endlessly 💖  
+<br>I promise to protect you always 🛡  
+<br>I promise to stay loyal forever 🤝  
+<br>I promise to never leave you 💍  
+
+<br><br>
+
+Signature:
+
+<canvas id="signaturePad" width="350" height="150"></canvas>
+
+<br>
+
+<button onclick="clearSignature()">Clear</button>
+<button onclick="signAgreement()">Sign ❤️</button>
+
+</div>
+
+<button onclick="goBack()">← BACK</button>
+
+</div>
+
+<div id="letterPage" class="hidden">
+
+<h1>A Letter For You 🥺</h1>
+
+<div id="envelopeContainer">
+
+<div class="envelope" onclick="openEnvelope()">
+<div class="flap"></div>
+</div>
+
+</div>
+
+<div id="letterContent" class="letter-paper hidden">
+<span id="letterText"></span>
+</div>
+
+<button onclick="goBack()">← BACK</button>
+
+</div>
+
+</div>
+
+<div class="overlay" id="overlay"></div>
+
+<div class="popup" id="popup">
+<p id="popupText"></p>
+<button onclick="closePopup()">OK ❤️</button>
+</div>
+
+<audio id="music" src="romantic.mp3" loop></audio>
 
 <script>
 
-const noBtn=document.getElementById("noBtn");
-const yesBtn=document.getElementById("yesBtn");
-const card=document.getElementById("card");
-const text=document.getElementById("mainText");
+/* navigation references */
 
-let noClickCount=0;
-const escapeRadius=150;
+const giftPage=document.getElementById("giftPage");
+const quizPage=document.getElementById("quizPage");
+const agreementPage=document.getElementById("agreementPage");
+const letterPage=document.getElementById("letterPage");
 
-/* detect mobile */
-function isMobile(){
-return window.innerWidth<=600;
+const popup=document.getElementById("popup");
+const overlay=document.getElementById("overlay");
+const popupText=document.getElementById("popupText");
+
+const music=document.getElementById("music");
+
+function hideAll(){
+giftPage.classList.add("hidden");
+quizPage.classList.add("hidden");
+agreementPage.classList.add("hidden");
+letterPage.classList.add("hidden");
 }
 
-/* DESKTOP original */
-function setInitialPosition(){
-
-if(isMobile()) return;
-
-const yesRect=yesBtn.getBoundingClientRect();
-
-noBtn.style.left=(yesRect.right+20)+"px";
-noBtn.style.top=yesRect.top+"px";
-
+function goBack(){
+music.pause();
+hideAll();
+giftPage.classList.remove("hidden");
 }
 
-function teleport(){
+/* popup */
 
-if(isMobile()) return;
-
-const btnWidth=noBtn.offsetWidth;
-const btnHeight=noBtn.offsetHeight;
-
-const maxX=window.innerWidth-btnWidth;
-const maxY=window.innerHeight-btnHeight;
-
-noBtn.style.left=Math.random()*maxX+"px";
-noBtn.style.top=Math.random()*maxY+"px";
-
+function showPopup(msg){
+popupText.innerText=msg;
+popup.classList.add("show");
+overlay.classList.add("show");
 }
 
-document.addEventListener("mousemove",function(e){
-
-if(isMobile()) return;
-
-const rect=noBtn.getBoundingClientRect();
-
-const centerX=rect.left+rect.width/2;
-const centerY=rect.top+rect.height/2;
-
-const dx=e.clientX-centerX;
-const dy=e.clientY-centerY;
-
-const distance=Math.sqrt(dx*dx+dy*dy);
-
-if(distance<escapeRadius){
-teleport();
+function closePopup(){
+popup.classList.remove("show");
+overlay.classList.remove("show");
 }
 
-});
+/* signature */
 
-/* MOBILE emotional */
-const messages=[
-"Are you sure? 🥺",
-"Think again ❤️",
-"Don't break my heart 💔",
-"Last chance 😭",
-"You have no choice now 😌"
-];
+let canvas=document.getElementById("signaturePad");
+let ctx=canvas.getContext("2d");
 
-noBtn.addEventListener("click",function(){
+let drawing=false;
 
-if(!isMobile()) return;
-
-noClickCount++;
-
-card.classList.add("shake");
-
-setTimeout(()=>{
-card.classList.remove("shake");
-},400);
-
-if(noClickCount<=messages.length){
-text.innerText=messages[noClickCount-1];
+function getPos(e){
+let rect=canvas.getBoundingClientRect();
+if(e.touches){
+return{
+x:e.touches[0].clientX-rect.left,
+y:e.touches[0].clientY-rect.top
+};
+}
+return{
+x:e.clientX-rect.left,
+y:e.clientY-rect.top
+};
 }
 
-/* grow YES */
-yesBtn.style.transform=`scale(${1+(noClickCount*0.25)})`;
+canvas.addEventListener("mousedown",start);
+canvas.addEventListener("touchstart",start,{passive:false});
 
-if(noClickCount>=5){
+canvas.addEventListener("mousemove",draw);
+canvas.addEventListener("touchmove",draw,{passive:false});
 
-yesBtn.style.transform="scale(1)";
-yesBtn.style.width="70%";
-yesBtn.style.fontSize="18px";
+canvas.addEventListener("mouseup",stop);
+canvas.addEventListener("touchend",stop);
 
-yesBtn.innerHTML="YES ❤️ (Only option left 😌)";
-
-text.innerText="I knew you loved me 😘";
-
-noBtn.style.display="none";
-
+function start(e){
+drawing=true;
+let pos=getPos(e);
+ctx.beginPath();
+ctx.moveTo(pos.x,pos.y);
 }
 
-});
-
-/* hearts */
-function createHeart(){
-
-const heart=document.createElement("div");
-
-heart.className="heart";
-heart.innerHTML="❤️";
-
-heart.style.left=Math.random()*100+"vw";
-heart.style.animationDuration=(4+Math.random()*4)+"s";
-
-document.body.appendChild(heart);
-
-setTimeout(()=>heart.remove(),8000);
-
+function draw(e){
+if(!drawing)return;
+e.preventDefault();
+let pos=getPos(e);
+ctx.lineTo(pos.x,pos.y);
+ctx.stroke();
 }
 
-setInterval(createHeart,800);
+function stop(){
+drawing=false;
+}
 
-window.onload=setInitialPosition;
+function clearSignature(){
+ctx.clearRect(0,0,canvas.width,canvas.height);
+}
 
-/* YES button FIXED popup restored */
-function goNextPage(){
+function signAgreement(){
 
-document.getElementById("clickSound").play().catch(()=>{});
+let data=ctx.getImageData(0,0,canvas.width,canvas.height).data;
+let empty=true;
 
-alert("I knew it! ❤️");
+for(let i=0;i<data.length;i+=4){
+if(data[i+3]!=0){
+empty=false;
+break;
+}
+}
 
-window.location.href="next.html";
+if(empty)
+showPopup("Sign first cutie ❤️");
+else
+showPopup("You Are Officially Mine Forever ❤️");
 
 }
 
