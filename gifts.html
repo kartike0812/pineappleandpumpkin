@@ -108,6 +108,7 @@ border:2px solid #e6a4b4;
 border-radius:10px;
 background:white;
 cursor:crosshair;
+touch-action:none;
 }
 
 /* letter */
@@ -491,39 +492,62 @@ agreementPage.classList.remove("hidden");
 
 }
 
-let canvas=document.getElementById("signaturePad");
-let ctx=canvas.getContext("2d");
-let drawing=false;
+let canvas = document.getElementById("signaturePad");
+let ctx = canvas.getContext("2d");
 
-canvas.onmousedown=e=>{
-drawing=true;
-ctx.beginPath();
-ctx.moveTo(e.offsetX,e.offsetY);
+let drawing = false;
+
+ctx.lineWidth = 2;
+ctx.lineCap = "round";
+ctx.strokeStyle = "#000";
+
+function getPosition(e) {
+
+let rect = canvas.getBoundingClientRect();
+
+if (e.touches) {
+return {
+x: e.touches[0].clientX - rect.left,
+y: e.touches[0].clientY - rect.top
 };
-
-canvas.onmouseup=()=>drawing=false;
-
-canvas.onmousemove=e=>{
-if(!drawing)return;
-ctx.lineTo(e.offsetX,e.offsetY);
-ctx.stroke();
+}
+else {
+return {
+x: e.clientX - rect.left,
+y: e.clientY - rect.top
 };
-
-function clearSignature(){
-ctx.clearRect(0,0,canvas.width,canvas.height);
 }
 
-function signAgreement(){
+}
 
-let data=ctx.getImageData(0,0,canvas.width,canvas.height).data;
+function startDrawing(e) {
+drawing = true;
+let pos = getPosition(e);
+ctx.beginPath();
+ctx.moveTo(pos.x, pos.y);
+}
 
-let empty=true;
+function draw(e) {
+if (!drawing) return;
+e.preventDefault();
+let pos = getPosition(e);
+ctx.lineTo(pos.x, pos.y);
+ctx.stroke();
+}
 
-for(let i=0;i<data.length;i+=4){
+function stopDrawing() {
+drawing = false;
+}
 
-if(data[i+3]!=0){
-empty=false;
-break;
+canvas.addEventListener("mousedown", startDrawing);
+canvas.addEventListener("mousemove", draw);
+canvas.addEventListener("mouseup", stopDrawing);
+canvas.addEventListener("mouseleave", stopDrawing);
+
+canvas.addEventListener("touchstart", startDrawing, { passive:false });
+canvas.addEventListener("touchmove", draw, { passive:false });
+canvas.addEventListener("touchend", stopDrawing);
+
 }
 
 }
@@ -652,3 +676,4 @@ setTimeout(()=>petal.remove(),8000);
 
 </body>
 </html>
+
