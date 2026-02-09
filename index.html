@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#e6a4b4">
 <title>Will you be mine?</title>
 
 <style>
@@ -75,7 +76,6 @@ body {
     floatCard 4s ease-in-out infinite;
 }
 
-/* Entrance animation */
 @keyframes fadeIn {
 
     from {
@@ -90,7 +90,6 @@ body {
 
 }
 
-/* Floating card */
 @keyframes floatCard {
 
     0% { transform: translate(-50%, -50%) translateY(0px); }
@@ -99,13 +98,11 @@ body {
 
 }
 
-/* GIF */
 .gif-container img {
 
     width: 130px;
 }
 
-/* Text */
 h1 {
 
     font-size: 24px;
@@ -117,7 +114,6 @@ p {
     color: #444;
 }
 
-/* YES button */
 #yesBtn {
 
     background: #ff4d6d;
@@ -145,7 +141,6 @@ p {
     box-shadow: 0 0 20px rgba(255,77,109,0.9);
 }
 
-/* NO button (Flash mode) */
 #noBtn {
 
     position: fixed;
@@ -162,6 +157,26 @@ p {
     cursor: pointer;
 
     z-index: 9999;
+}
+
+
+/* ================= MOBILE ONLY ================= */
+
+@media (max-width:600px){
+
+.card{
+width:90% !important;
+padding:20px !important;
+}
+
+.gif-container img{
+width:110px !important;
+}
+
+button{
+width:100% !important;
+}
+
 }
 
 </style>
@@ -197,21 +212,16 @@ const yesBtn = document.getElementById("yesBtn");
 
 const escapeRadius = 150;
 
-/* PERFECT starting alignment */
 function setInitialPosition() {
 
     const yesRect = yesBtn.getBoundingClientRect();
 
     const gap = 20;
 
-    const startX = yesRect.right + gap;
-    const startY = yesRect.top;
-
-    noBtn.style.left = startX + "px";
-    noBtn.style.top = startY + "px";
+    noBtn.style.left = yesRect.right + gap + "px";
+    noBtn.style.top = yesRect.top + "px";
 }
 
-/* FLASH teleport */
 function teleport() {
 
     const btnWidth = noBtn.offsetWidth;
@@ -220,14 +230,10 @@ function teleport() {
     const maxX = window.innerWidth - btnWidth;
     const maxY = window.innerHeight - btnHeight;
 
-    const newX = Math.random() * maxX;
-    const newY = Math.random() * maxY;
-
-    noBtn.style.left = newX + "px";
-    noBtn.style.top = newY + "px";
+    noBtn.style.left = Math.random() * maxX + "px";
+    noBtn.style.top = Math.random() * maxY + "px";
 }
 
-/* Detect cursor proximity */
 document.addEventListener("mousemove", function(e) {
 
     const rect = noBtn.getBoundingClientRect();
@@ -240,15 +246,13 @@ document.addEventListener("mousemove", function(e) {
 
     const distance = Math.sqrt(dx*dx + dy*dy);
 
-    if(distance < escapeRadius) {
-
-        teleport();
-
-    }
+    if(distance < escapeRadius) teleport();
 
 });
 
-/* Floating hearts generator */
+/* mobile touch support */
+document.addEventListener("touchstart", teleport);
+
 function createHeart(){
 
     const heart = document.createElement("div");
@@ -266,13 +270,11 @@ function createHeart(){
 
 setInterval(createHeart, 800);
 
-/* Run on load */
 window.onload = setInitialPosition;
 
-/* YES button */
 function goNextPage() {
 
-    document.getElementById("clickSound").play();
+    document.getElementById("clickSound").play().catch(()=>{});
 
     alert("I knew it! ❤️");
 
