@@ -10,31 +10,24 @@
 
 /* Animated romantic gradient background */
 body {
-
     margin: 0;
     padding: 0;
-
     background: linear-gradient(-45deg, #e6a4b4, #f3c6cf, #f8d7da, #e6a4b4);
     background-size: 400% 400%;
-
     animation: gradientMove 12s ease infinite;
-
     height: 100vh;
     font-family: Arial, sans-serif;
     overflow: hidden;
 }
 
 @keyframes gradientMove {
-
     0% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
     100% { background-position: 0% 50%; }
-
 }
 
 /* Floating hearts */
 .heart {
-
     position: fixed;
     bottom: -20px;
     font-size: 20px;
@@ -43,125 +36,92 @@ body {
 }
 
 @keyframes floatUp {
-
     to {
         transform: translateY(-110vh);
         opacity: 0;
     }
-
 }
 
 /* Center card */
 .card {
-
     background: white;
     width: 350px;
     padding: 25px;
     border-radius: 20px;
-
     box-shadow:
     0px 10px 25px rgba(0,0,0,0.2),
     0 0 30px rgba(255,255,255,0.3);
-
     text-align: center;
-
     position: absolute;
     left: 50%;
     top: 50%;
-
     transform: translate(-50%, -50%);
-
     animation:
     fadeIn 1s ease,
     floatCard 4s ease-in-out infinite;
 }
 
 @keyframes fadeIn {
-
     from {
         opacity: 0;
         transform: translate(-50%, -60%);
     }
-
     to {
         opacity: 1;
         transform: translate(-50%, -50%);
     }
-
 }
 
 @keyframes floatCard {
-
     0% { transform: translate(-50%, -50%) translateY(0px); }
     50% { transform: translate(-50%, -50%) translateY(-10px); }
     100% { transform: translate(-50%, -50%) translateY(0px); }
-
 }
 
 .gif-container img {
-
     width: 130px;
 }
 
 h1 {
-
     font-size: 24px;
 }
 
 p {
-
     font-size: 14px;
     color: #444;
 }
 
 #yesBtn {
-
     background: #ff4d6d;
     color: white;
-
     border: none;
     padding: 12px 28px;
-
     border-radius: 25px;
     font-size: 16px;
-
     cursor: pointer;
-
     margin-top: 20px;
-
     box-shadow: 0 0 10px rgba(255,77,109,0.6);
-
-    transition: 0.3s;
+    transition: all 0.3s ease;
 }
 
 #yesBtn:hover {
-
     transform: scale(1.1);
-
     box-shadow: 0 0 20px rgba(255,77,109,0.9);
 }
 
 #noBtn {
-
     position: fixed;
-
     background: #4361ee;
     color: white;
-
     border: none;
     padding: 12px 28px;
-
     border-radius: 25px;
     font-size: 16px;
-
     cursor: pointer;
-
     z-index: 9999;
 }
 
-
-/* ================= MOBILE ONLY ================= */
-
+/* MOBILE ONLY */
 @media (max-width:600px){
 
 .card{
@@ -174,7 +134,20 @@ width:110px !important;
 }
 
 button{
-width:100% !important;
+width:auto !important;
+margin:10px 5px;
+}
+
+#noBtn{
+position:relative !important;
+left:auto !important;
+top:auto !important;
+}
+
+.mobile-buttons{
+display:flex;
+justify-content:center;
+flex-wrap:wrap;
 }
 
 }
@@ -197,11 +170,12 @@ I know mumma choosed us for each other when we were not even looking for each ot
 But now I want to spend every second with you my pineapple ❤️
 </p>
 
+<div class="mobile-buttons">
 <button id="yesBtn" onclick="goNextPage()">YES ❤️</button>
-
+<button id="noBtn">NO 💔</button>
 </div>
 
-<button id="noBtn">NO 💔</button>
+</div>
 
 <audio id="clickSound" src="click.mp3"></audio>
 
@@ -212,7 +186,16 @@ const yesBtn = document.getElementById("yesBtn");
 
 const escapeRadius = 150;
 
+let noClickCount = 0;
+
+function isMobile(){
+    return window.innerWidth <= 600;
+}
+
+/* DESKTOP BEHAVIOR (UNCHANGED) */
 function setInitialPosition() {
+
+    if(isMobile()) return;
 
     const yesRect = yesBtn.getBoundingClientRect();
 
@@ -223,6 +206,8 @@ function setInitialPosition() {
 }
 
 function teleport() {
+
+    if(isMobile()) return;
 
     const btnWidth = noBtn.offsetWidth;
     const btnHeight = noBtn.offsetHeight;
@@ -235,6 +220,8 @@ function teleport() {
 }
 
 document.addEventListener("mousemove", function(e) {
+
+    if(isMobile()) return;
 
     const rect = noBtn.getBoundingClientRect();
 
@@ -250,9 +237,31 @@ document.addEventListener("mousemove", function(e) {
 
 });
 
-/* mobile touch support */
-document.addEventListener("touchstart", teleport);
+/* MOBILE BEHAVIOR */
+noBtn.addEventListener("click", function(){
 
+    if(!isMobile()) return;
+
+    noClickCount++;
+
+    let scale = 1 + (noClickCount * 0.3);
+
+    yesBtn.style.transform = `scale(${scale})`;
+
+    if(noClickCount >= 5){
+
+        yesBtn.style.transform = "scale(1)";
+        yesBtn.style.width = "100%";
+        yesBtn.style.fontSize = "24px";
+        yesBtn.style.padding = "20px";
+        yesBtn.innerHTML = "YES ❤️ (Only option left 😌)";
+
+        noBtn.style.display = "none";
+    }
+
+});
+
+/* Floating hearts */
 function createHeart(){
 
     const heart = document.createElement("div");
@@ -272,6 +281,7 @@ setInterval(createHeart, 800);
 
 window.onload = setInitialPosition;
 
+/* YES BUTTON */
 function goNextPage() {
 
     document.getElementById("clickSound").play().catch(()=>{});
