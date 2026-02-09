@@ -4,161 +4,268 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#e6a4b4">
-<title>Will you be mine?</title>
+<title>You are my forever ❤️</title>
 
 <style>
 
-/* Animated romantic gradient background */
-body {
-    margin: 0;
-    padding: 0;
-    background: linear-gradient(-45deg, #e6a4b4, #f3c6cf, #f8d7da, #e6a4b4);
-    background-size: 400% 400%;
-    animation: gradientMove 12s ease infinite;
-    height: 100vh;
-    font-family: Arial, sans-serif;
-    overflow: hidden;
+body{
+margin:0;
+padding:0;
+background:#f3e4cf;
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+font-family:Georgia, serif;
+overflow:hidden;
+position:relative;
+
+/* cinematic zoom */
+animation:cinematicZoom 2s ease;
 }
 
-@keyframes gradientMove {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
+/* cinematic vignette */
+
+body::after{
+content:"";
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+pointer-events:none;
+background:
+radial-gradient(circle at center,
+transparent 40%,
+rgba(0,0,0,0.15) 70%,
+rgba(0,0,0,0.35) 100%);
+z-index:1;
 }
 
-/* Floating hearts */
-.heart {
-    position: fixed;
-    bottom: -20px;
-    font-size: 20px;
-    animation: floatUp linear forwards;
-    pointer-events: none;
+@keyframes cinematicZoom{
+from{
+transform:scale(1.15);
+opacity:0;
+}
+to{
+transform:scale(1);
+opacity:1;
+}
 }
 
-@keyframes floatUp {
-    to {
-        transform: translateY(-110vh);
-        opacity: 0;
-    }
+/* card */
+
+.card{
+background:#e6a4b4;
+width:800px;
+max-width:95%;
+padding:40px;
+border-radius:20px;
+box-shadow:
+0 20px 40px rgba(0,0,0,0.25),
+0 0 60px rgba(255,100,150,0.25);
+
+text-align:center;
+position:relative;
+z-index:2;
+
+/* floating + breathing */
+animation:
+floatCard 4s ease-in-out infinite,
+cardBreathing 6s ease-in-out infinite;
 }
 
-/* Center card */
-.card {
-    background: white;
-    width: 350px;
-    padding: 25px;
-    border-radius: 20px;
-    box-shadow:
-    0px 10px 25px rgba(0,0,0,0.2),
-    0 0 30px rgba(255,255,255,0.3);
-    text-align: center;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    animation:
-    fadeIn 1s ease,
-    floatCard 4s ease-in-out infinite;
+@keyframes floatCard{
+0%,100%{transform:translateY(0);}
+50%{transform:translateY(-12px);}
 }
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translate(-50%, -60%);
-    }
-    to {
-        opacity: 1;
-        transform: translate(-50%, -50%);
-    }
+@keyframes cardBreathing{
+0%,100%{transform:scale(1);}
+50%{transform:scale(1.02);}
 }
 
-@keyframes floatCard {
-    0% { transform: translate(-50%, -50%) translateY(0px); }
-    50% { transform: translate(-50%, -50%) translateY(-10px); }
-    100% { transform: translate(-50%, -50%) translateY(0px); }
+/* heading glow */
+
+h1{
+font-size:32px;
+margin-bottom:20px;
+animation:titleGlow 3s infinite alternate;
 }
 
-/* SHAKE animation */
-@keyframes shakeScreen {
-
-0% { transform: translate(-50%, -50%) translate(0px, 0px); }
-20% { transform: translate(-50%, -50%) translate(-6px, 6px); }
-40% { transform: translate(-50%, -50%) translate(6px, -6px); }
-60% { transform: translate(-50%, -50%) translate(-6px, 0px); }
-80% { transform: translate(-50%, -50%) translate(6px, 6px); }
-100% { transform: translate(-50%, -50%) translate(0px, 0px); }
-
+@keyframes titleGlow{
+from{
+text-shadow:0 0 5px rgba(255,255,255,0.3);
+}
+to{
+text-shadow:
+0 0 20px rgba(255,255,255,0.8),
+0 0 40px rgba(255,100,150,0.6);
+}
 }
 
-.shake {
-animation: shakeScreen 0.4s;
+/* glowing image */
+
+img{
+width:250px;
+max-width:90%;
+border-radius:15px;
+margin-bottom:20px;
+
+box-shadow:0 0 20px rgba(255,0,100,0.6);
+
+animation:imageGlow 3s infinite alternate;
 }
 
-.gif-container img {
-    width: 130px;
+@keyframes imageGlow{
+from{
+box-shadow:0 0 15px rgba(255,0,100,0.4);
+}
+to{
+box-shadow:
+0 0 35px rgba(255,0,100,0.9),
+0 0 60px rgba(255,100,150,0.5);
+}
 }
 
-h1 {
-    font-size: 24px;
+/* text fade */
+
+p{
+font-size:14px;
+line-height:1.6;
+max-width:600px;
+margin:auto;
+
+animation:textFade 3s ease;
 }
 
-p {
-    font-size: 14px;
-    color: #444;
+@keyframes textFade{
+from{
+opacity:0;
+transform:translateY(20px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
 }
 
-#yesBtn {
-    background: #ff4d6d;
-    color: white;
-    border: none;
-    padding: 12px 28px;
-    border-radius: 25px;
-    font-size: 16px;
-    cursor: pointer;
-    margin-top: 20px;
-    box-shadow: 0 0 10px rgba(255,77,109,0.6);
-    transition: all 0.3s ease;
+/* glowing button */
+
+button{
+background:red;
+color:white;
+border:none;
+padding:10px 25px;
+border-radius:20px;
+cursor:pointer;
+margin-top:20px;
+font-size:15px;
+
+box-shadow:0 0 10px rgba(255,0,0,0.5);
+
+animation:buttonGlow 1.5s infinite alternate;
 }
 
-#yesBtn:hover {
-    transform: scale(1.1);
+@keyframes buttonGlow{
+from{
+box-shadow:0 0 10px rgba(255,0,0,0.4);
+}
+to{
+box-shadow:
+0 0 25px rgba(255,0,0,0.9),
+0 0 40px rgba(255,100,100,0.6);
+}
 }
 
-#noBtn {
-    position: fixed;
-    background: #4361ee;
-    color: white;
-    border: none;
-    padding: 12px 28px;
-    border-radius: 25px;
-    font-size: 16px;
-    cursor: pointer;
-    z-index: 9999;
+/* petals */
+
+.petal{
+position:fixed;
+top:-20px;
+font-size:20px;
+pointer-events:none;
+animation:fall linear forwards;
+z-index:999;
 }
 
-/* MOBILE ONLY */
+@keyframes fall{
+to{
+transform:translateY(110vh) rotate(360deg);
+opacity:0.9;
+}
+}
+
+/* hearts */
+
+.heart{
+position:fixed;
+bottom:-20px;
+font-size:20px;
+animation:floatHeart linear forwards;
+z-index:998;
+}
+
+@keyframes floatHeart{
+to{
+transform:translateY(-110vh);
+opacity:0;
+}
+}
+
+/* confetti */
+
+.confetti{
+position:fixed;
+width:8px;
+height:8px;
+animation:confettiFall linear forwards;
+z-index:999;
+}
+
+@keyframes confettiFall{
+to{
+transform:translateY(110vh) rotate(720deg);
+opacity:0;
+}
+}
+
+
+/* ================= MOBILE ONLY ================= */
+
 @media (max-width:600px){
 
 .card{
-width:90% !important;
+
+width:95% !important;
 padding:20px !important;
+
 }
 
-.gif-container img{
-width:110px !important;
+h1{
+
+font-size:24px !important;
+
 }
 
-.mobile-buttons{
-display:flex;
-justify-content:center;
-gap:10px;
-margin-top:10px;
+p{
+
+font-size:15px !important;
+
 }
 
-#noBtn{
-position:relative !important;
-left:auto !important;
-top:auto !important;
+img{
+
+width:80% !important;
+max-width:280px !important;
+
+}
+
+button{
+
+width:100% !important;
+font-size:16px !important;
+
 }
 
 }
@@ -170,137 +277,83 @@ top:auto !important;
 
 <div class="card">
 
-<div class="gif-container">
-<img src="bubu-dudu.gif">
-</div>
+<h1>You are my forever 🌍 ❤️!</h1>
 
-<h1 id="mainText">Will you be mine 🥺?</h1>
+<img src="your-photo.jpeg" alt="Our Photo">
 
 <p>
-I know mumma choosed us for each other when we were not even looking for each other,
-But now I want to spend every second with you my pineapple ❤️
+Moti, actually we don’t need any Valentine’s Day or any kind of special day to celebrate our love. Our every day is Valentine’s Day. Humara har din celebration hai, har din pyara hai.
+I love you more than words can say ❤️  
+Thank you for being my peace, my smile, my love.
 </p>
 
-<div class="mobile-buttons">
-<button id="yesBtn" onclick="goNextPage()">YES ❤️</button>
-<button id="noBtn">NO 💔</button>
-</div>
+<button onclick="goBack()">← BACK</button>
 
 </div>
 
-<audio id="clickSound" src="click.mp3"></audio>
+<audio id="music" src="your-music.mp3" loop></audio>
 
 <script>
 
-const noBtn = document.getElementById("noBtn");
-const yesBtn = document.getElementById("yesBtn");
-const card = document.querySelector(".card");
-const text = document.getElementById("mainText");
+const music=document.getElementById("music");
 
-const escapeRadius = 150;
-let noClickCount = 0;
+window.onload=function(){
 
-/* detect mobile */
-function isMobile(){
-return window.innerWidth <= 600;
+music.volume=0.8;
+
+music.play().catch(()=>{});
+
+startHearts();
+startPetals();
+
+setInterval(()=>{
+
+if(!music.paused){
+
+burstConfetti();
+pulseCard();
+
 }
 
-/* DESKTOP LOGIC (UNCHANGED) */
-function setInitialPosition(){
+},1400);
 
-if(isMobile()) return;
+};
 
-const yesRect = yesBtn.getBoundingClientRect();
-const gap = 20;
+function goBack(){
 
-noBtn.style.left = yesRect.right + gap + "px";
-noBtn.style.top = yesRect.top + "px";
+music.pause();
+
+window.location.href="index.html";
+
 }
 
-function teleport(){
+/* petals */
 
-if(isMobile()) return;
+function startPetals(){
 
-const btnWidth = noBtn.offsetWidth;
-const btnHeight = noBtn.offsetHeight;
+setInterval(()=>{
 
-const maxX = window.innerWidth - btnWidth;
-const maxY = window.innerHeight - btnHeight;
+const petal=document.createElement("div");
 
-noBtn.style.left = Math.random() * maxX + "px";
-noBtn.style.top = Math.random() * maxY + "px";
-}
+petal.className="petal";
+petal.innerHTML="🌹";
 
-document.addEventListener("mousemove", function(e){
+petal.style.left=Math.random()*100+"vw";
+petal.style.animationDuration=(5+Math.random()*5)+"s";
 
-if(isMobile()) return;
+document.body.appendChild(petal);
 
-const rect = noBtn.getBoundingClientRect();
+setTimeout(()=>petal.remove(),8000);
 
-const centerX = rect.left + rect.width/2;
-const centerY = rect.top + rect.height/2;
-
-const dx = e.clientX - centerX;
-const dy = e.clientY - centerY;
-
-const distance = Math.sqrt(dx*dx + dy*dy);
-
-if(distance < escapeRadius) teleport();
-
-});
-
-/* MOBILE EMOTIONAL LOGIC */
-
-const messages = [
-"Are you sure? 🥺",
-"Think again ❤️",
-"Don't break my heart 💔",
-"Last chance 😭",
-"You have no choice now 😌"
-];
-
-noBtn.addEventListener("click", function(){
-
-if(!isMobile()) return;
-
-noClickCount++;
-
-/* SHAKE */
-card.classList.add("shake");
-
-setTimeout(()=>{
-card.classList.remove("shake");
 },400);
 
-/* text change */
-if(noClickCount <= messages.length){
-text.innerText = messages[noClickCount-1];
 }
 
-/* grow YES */
-let scale = 1 + (noClickCount * 0.3);
-yesBtn.style.transform = `scale(${scale})`;
+/* hearts */
 
-/* final takeover */
-if(noClickCount >= 5){
+function startHearts(){
 
-yesBtn.style.transform="scale(1)";
-yesBtn.style.width="100%";
-yesBtn.style.fontSize="24px";
-yesBtn.style.padding="20px";
-
-yesBtn.innerHTML="YES ❤️ (Only option left 😌)";
-
-text.innerText="I knew you loved me 😘";
-
-noBtn.style.display="none";
-
-}
-
-});
-
-/* floating hearts */
-function createHeart(){
+setInterval(()=>{
 
 const heart=document.createElement("div");
 
@@ -314,20 +367,48 @@ document.body.appendChild(heart);
 
 setTimeout(()=>heart.remove(),8000);
 
+},900);
+
 }
 
-setInterval(createHeart,800);
+/* confetti */
 
-window.onload=setInitialPosition;
+function burstConfetti(){
 
-/* YES BUTTON */
-function goNextPage(){
+for(let i=0;i<30;i++){
 
-document.getElementById("clickSound").play().catch(()=>{});
+const confetti=document.createElement("div");
 
-alert("I knew it! ❤️");
+confetti.className="confetti";
 
-window.location.href="next.html";
+confetti.style.left=Math.random()*100+"vw";
+
+confetti.style.background=
+["red","pink","white","gold"][Math.floor(Math.random()*4)];
+
+confetti.style.animationDuration=(3+Math.random()*2)+"s";
+
+document.body.appendChild(confetti);
+
+setTimeout(()=>confetti.remove(),5000);
+
+}
+
+}
+
+/* pulse */
+
+function pulseCard(){
+
+const card=document.querySelector(".card");
+
+card.style.transform="scale(1.04)";
+
+setTimeout(()=>{
+
+card.style.transform="scale(1)";
+
+},300);
 
 }
 
