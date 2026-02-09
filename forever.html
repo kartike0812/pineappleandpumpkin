@@ -19,13 +19,10 @@ align-items:center;
 font-family:Georgia, serif;
 overflow:hidden;
 position:relative;
-
-/* cinematic zoom */
 animation:cinematicZoom 2s ease;
 }
 
-/* cinematic vignette */
-
+/* vignette */
 body::after{
 content:"";
 position:fixed;
@@ -64,12 +61,9 @@ border-radius:20px;
 box-shadow:
 0 20px 40px rgba(0,0,0,0.25),
 0 0 60px rgba(255,100,150,0.25);
-
 text-align:center;
 position:relative;
 z-index:2;
-
-/* floating + breathing */
 animation:
 floatCard 4s ease-in-out infinite,
 cardBreathing 6s ease-in-out infinite;
@@ -85,8 +79,6 @@ cardBreathing 6s ease-in-out infinite;
 50%{transform:scale(1.02);}
 }
 
-/* heading glow */
-
 h1{
 font-size:32px;
 margin-bottom:20px;
@@ -94,9 +86,7 @@ animation:titleGlow 3s infinite alternate;
 }
 
 @keyframes titleGlow{
-from{
-text-shadow:0 0 5px rgba(255,255,255,0.3);
-}
+from{text-shadow:0 0 5px rgba(255,255,255,0.3);}
 to{
 text-shadow:
 0 0 20px rgba(255,255,255,0.8),
@@ -104,23 +94,17 @@ text-shadow:
 }
 }
 
-/* glowing image */
-
 img{
 width:250px;
 max-width:90%;
 border-radius:15px;
 margin-bottom:20px;
-
 box-shadow:0 0 20px rgba(255,0,100,0.6);
-
 animation:imageGlow 3s infinite alternate;
 }
 
 @keyframes imageGlow{
-from{
-box-shadow:0 0 15px rgba(255,0,100,0.4);
-}
+from{box-shadow:0 0 15px rgba(255,0,100,0.4);}
 to{
 box-shadow:
 0 0 35px rgba(255,0,100,0.9),
@@ -128,14 +112,11 @@ box-shadow:
 }
 }
 
-/* text fade */
-
 p{
 font-size:14px;
 line-height:1.6;
 max-width:600px;
 margin:auto;
-
 animation:textFade 3s ease;
 }
 
@@ -150,8 +131,6 @@ transform:translateY(0);
 }
 }
 
-/* glowing button */
-
 button{
 background:red;
 color:white;
@@ -161,16 +140,12 @@ border-radius:20px;
 cursor:pointer;
 margin-top:20px;
 font-size:15px;
-
 box-shadow:0 0 10px rgba(255,0,0,0.5);
-
 animation:buttonGlow 1.5s infinite alternate;
 }
 
 @keyframes buttonGlow{
-from{
-box-shadow:0 0 10px rgba(255,0,0,0.4);
-}
+from{box-shadow:0 0 10px rgba(255,0,0,0.4);}
 to{
 box-shadow:
 0 0 25px rgba(255,0,0,0.9),
@@ -230,42 +205,31 @@ opacity:0;
 }
 }
 
-
-/* ================= MOBILE ONLY ================= */
+/* MOBILE ONLY */
 
 @media (max-width:600px){
 
 .card{
-
 width:95% !important;
 padding:20px !important;
-
 }
 
 h1{
-
 font-size:24px !important;
-
 }
 
 p{
-
 font-size:15px !important;
-
 }
 
 img{
-
 width:80% !important;
 max-width:280px !important;
-
 }
 
 button{
-
 width:100% !important;
 font-size:16px !important;
-
 }
 
 }
@@ -279,7 +243,7 @@ font-size:16px !important;
 
 <h1>You are my forever 🌍 ❤️!</h1>
 
-<img src="your-photo.jpeg" alt="Our Photo">
+<img src="your-photo.jpeg">
 
 <p>
 Moti, actually we don’t need any Valentine’s Day or any kind of special day to celebrate our love. Our every day is Valentine’s Day. Humara har din celebration hai, har din pyara hai.
@@ -295,13 +259,35 @@ Thank you for being my peace, my smile, my love.
 
 <script>
 
-const music=document.getElementById("music");
+const music = document.getElementById("music");
+let musicStarted = false;
 
+/* detect mobile */
+function isMobile(){
+return /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent);
+}
+
+/* start music safely */
+function startMusic(){
+
+if(musicStarted) return;
+
+music.volume = 0.8;
+
+music.play()
+.then(()=>{
+musicStarted = true;
+})
+.catch(()=>{});
+
+}
+
+/* desktop unchanged */
 window.onload=function(){
 
-music.volume=0.8;
-
-music.play().catch(()=>{});
+if(!isMobile()){
+startMusic();
+}
 
 startHearts();
 startPetals();
@@ -319,6 +305,11 @@ pulseCard();
 
 };
 
+/* mobile autoplay fix */
+document.addEventListener("touchstart",startMusic,{once:true});
+document.addEventListener("click",startMusic,{once:true});
+
+/* back button */
 function goBack(){
 
 music.pause();
@@ -328,7 +319,6 @@ window.location.href="index.html";
 }
 
 /* petals */
-
 function startPetals(){
 
 setInterval(()=>{
@@ -350,7 +340,6 @@ setTimeout(()=>petal.remove(),8000);
 }
 
 /* hearts */
-
 function startHearts(){
 
 setInterval(()=>{
@@ -372,7 +361,6 @@ setTimeout(()=>heart.remove(),8000);
 }
 
 /* confetti */
-
 function burstConfetti(){
 
 for(let i=0;i<30;i++){
@@ -397,7 +385,6 @@ setTimeout(()=>confetti.remove(),5000);
 }
 
 /* pulse */
-
 function pulseCard(){
 
 const card=document.querySelector(".card");
