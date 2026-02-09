@@ -104,12 +104,14 @@ text-align:left;
 }
 
 canvas{
+canvas{
 border:2px solid #e6a4b4;
 border-radius:10px;
 background:white;
 cursor:crosshair;
-touch-action:none;   /* IMPORTANT PHONE FIX */
+touch-action:none;   /* ADD THIS LINE */
 }
+
 
 
 /* letter */
@@ -275,71 +277,12 @@ I promise to love you endlessly 💖
 
 Signature:
 
-let canvas = document.getElementById("signaturePad");
-let ctx = canvas.getContext("2d");
+<canvas id="signaturePad" width="350" height="150"></canvas>
 
-let drawing = false;
+<br>
 
-/* make drawing smoother */
-ctx.lineWidth = 2;
-ctx.lineCap = "round";
-ctx.strokeStyle = "#000";
-
-/* function to get correct position */
-function getPosition(e) {
-
-let rect = canvas.getBoundingClientRect();
-
-if (e.touches) {
-return {
-x: e.touches[0].clientX - rect.left,
-y: e.touches[0].clientY - rect.top
-};
-}
-else {
-return {
-x: e.clientX - rect.left,
-y: e.clientY - rect.top
-};
-}
-
-}
-
-/* start drawing */
-function startDrawing(e) {
-drawing = true;
-let pos = getPosition(e);
-ctx.beginPath();
-ctx.moveTo(pos.x, pos.y);
-}
-
-/* draw */
-function draw(e) {
-if (!drawing) return;
-
-e.preventDefault();
-
-let pos = getPosition(e);
-ctx.lineTo(pos.x, pos.y);
-ctx.stroke();
-}
-
-/* stop drawing */
-function stopDrawing() {
-drawing = false;
-}
-
-/* mouse events */
-canvas.addEventListener("mousedown", startDrawing);
-canvas.addEventListener("mousemove", draw);
-canvas.addEventListener("mouseup", stopDrawing);
-canvas.addEventListener("mouseleave", stopDrawing);
-
-/* touch events (PHONE FIX) */
-canvas.addEventListener("touchstart", startDrawing, { passive:false });
-canvas.addEventListener("touchmove", draw, { passive:false });
-canvas.addEventListener("touchend", stopDrawing);
-
+<button onclick="clearSignature()">Clear</button>
+<button onclick="signAgreement()">Sign ❤️</button>
 
 <br>
 
@@ -557,26 +500,62 @@ agreementPage.classList.remove("hidden");
 
 }
 
-let canvas=document.getElementById("signaturePad");
-let ctx=canvas.getContext("2d");
-let drawing=false;
+let canvas = document.getElementById("signaturePad");
+let ctx = canvas.getContext("2d");
 
-canvas.onmousedown=e=>{
-drawing=true;
+let drawing = false;
+
+ctx.lineWidth = 2;
+ctx.lineCap = "round";
+ctx.strokeStyle = "#000";
+
+function getPosition(e) {
+
+let rect = canvas.getBoundingClientRect();
+
+if (e.touches) {
+return {
+x: e.touches[0].clientX - rect.left,
+y: e.touches[0].clientY - rect.top
+};
+}
+else {
+return {
+x: e.clientX - rect.left,
+y: e.clientY - rect.top
+};
+}
+
+}
+
+function startDrawing(e) {
+drawing = true;
+let pos = getPosition(e);
 ctx.beginPath();
-ctx.moveTo(e.offsetX,e.offsetY);
-};
+ctx.moveTo(pos.x, pos.y);
+}
 
-canvas.onmouseup=()=>drawing=false;
-
-canvas.onmousemove=e=>{
-if(!drawing)return;
-ctx.lineTo(e.offsetX,e.offsetY);
+function draw(e) {
+if (!drawing) return;
+e.preventDefault();
+let pos = getPosition(e);
+ctx.lineTo(pos.x, pos.y);
 ctx.stroke();
-};
+}
 
-function clearSignature(){
-ctx.clearRect(0,0,canvas.width,canvas.height);
+function stopDrawing() {
+drawing = false;
+}
+
+canvas.addEventListener("mousedown", startDrawing);
+canvas.addEventListener("mousemove", draw);
+canvas.addEventListener("mouseup", stopDrawing);
+canvas.addEventListener("mouseleave", stopDrawing);
+
+canvas.addEventListener("touchstart", startDrawing, { passive:false });
+canvas.addEventListener("touchmove", draw, { passive:false });
+canvas.addEventListener("touchend", stopDrawing);
+
 }
 
 function signAgreement(){
@@ -718,5 +697,6 @@ setTimeout(()=>petal.remove(),8000);
 
 </body>
 </html>
+
 
 
